@@ -1,0 +1,10 @@
+Programme, Aufgaben und Sonstiges:
+
+Projektphasen:
+Zeitplanung (Soll / Ist) -> Excel
+Ressourcen -> Computer, Software, ...
+Zeitlicher Projektplan Gantt Diagramm -> Programm für Gantt Diagramme
+Zielplattform -> Python (Datenbanksystem, Webbrowser, ...)
+Oberfläche -> Mockups (Zeichnungen per Hand oder Programm)
+Projektplattform -> GitHub
+Dokumentation -> Microsoft Word / Textdokument
