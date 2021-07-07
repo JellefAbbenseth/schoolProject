@@ -36,16 +36,40 @@ def player_entry():
 
 
 # Aufgaben in einer Textdatei speichern
+# Am Ende einen Zeilenumbruch einfügen
 
-def safe_exercises(exercises):
-    file = open('files/Aufgaben.txt', 'w')
-    for i in exercises:
-        file.write(str(list(i)))
-        file.write('\n')
-    file = open('files/Aufgaben.txt', 'r')
-    print(file.read())
+def safe_exercises(text):
+    file = open('files/Aufgaben.txt', 'a')
+    file.write(text)
+    file.write('\n')
     file.close()
 
+
+# Einlesen der Textdatei
+# abgleich mit Benutzer und Aufgabenblattnummer
+
+def read_exercises(name, exerciseSheet):
+    file = open('files/Aufgaben.txt', 'r')
+    numSheet = exerciseSheet
+    lastLine = ''
+    # print('Testbeginn')
+    for line in file:
+        line = line.rstrip()
+        # print(line)
+        variables = line.split(';', 3)
+        if variables[0] == name:
+            nextLine = f'{variables[0]};{variables[1]};{variables[2]}'
+            if lastLine == nextLine:
+                if numSheet == int(variables[1]):
+                    # print(numSheet)
+                    numSheet = int(variables[1]) + 1
+                    # print(numSheet)
+            lastLine = f'{variables[0]};{variables[1]};{variables[2]}'
+    #     print(variables)
+    # print(numSheet)
+    # print('Testende')
+    file.close()
+    return numSheet
 
 # Programmstart "Main"
 # Zufallszahlen werden generiert
@@ -68,12 +92,15 @@ exerciseSheet = 1
 day = date.today()
 correct = False
 correctAnswersAverage = 0
-
-exercises = list()
+exercises = ''
 
 print('Programm Start\n')
 
 name = input('Bitte gib deinen Namen ein: \n')
+
+exerciseSheet = read_exercises(name, exerciseSheet)
+print(exerciseSheet)
+# number_exercises(exercises, name)
 
 for i in range(0, 3):
     num1 = random.randint(0, 10)
@@ -92,13 +119,13 @@ for i in range(0, 3):
         cntCorrect += 1
         correct = True
     cntExercises += 1
-    ex = [name, exerciseSheet, cntExercises, day, num1, ranOperator, num2, entry, result, correct]
-    exercises.append(ex)
+    t = f'{name};{exerciseSheet};{cntExercises};{day};{num1};{ranOperator};{num2};{entry};{result};{correct}\n'
+    exercises += t
 
 print(f'{name} hat {cntCorrect} von {cntExercises} richtig beantwortet!\n')
 correctAnswersAverage = int(cntCorrect / cntExercises * 100)
-ex = [name, exerciseSheet, cntExercises, cntCorrect, correctAnswersAverage]
-exercises.append(ex)
+t = f'{name};{exerciseSheet};{cntExercises};{day};{cntCorrect};{correctAnswersAverage}'
+exercises += t
 
 safe_exercises(exercises)
 
