@@ -37,11 +37,9 @@ def player_entry():
 
 # Aufgaben in einer Textdatei speichern
 
-def safe_exercises(exercises):
+def safe_exercises(text):
     file = open('files/Aufgaben.txt', 'w')
-    for i in exercises:
-        file.write(str(list(i)))
-        file.write('\n')
+    file.write(text)
     file = open('files/Aufgaben.txt', 'r')
     print(file.read())
     file.close()
@@ -68,8 +66,7 @@ exerciseSheet = 1
 day = date.today()
 correct = False
 correctAnswersAverage = 0
-
-exercises = list()
+exercises = ''
 
 print('Programm Start\n')
 
@@ -92,13 +89,13 @@ for i in range(0, 3):
         cntCorrect += 1
         correct = True
     cntExercises += 1
-    ex = [name, exerciseSheet, cntExercises, day, num1, ranOperator, num2, entry, result, correct]
-    exercises.append(ex)
+    t = (f'{name};{exerciseSheet};{cntExercises};{day};{num1};{ranOperator};{num2};{entry};{result};{correct}\n')
+    exercises += t
 
 print(f'{name} hat {cntCorrect} von {cntExercises} richtig beantwortet!\n')
 correctAnswersAverage = int(cntCorrect / cntExercises * 100)
-ex = [name, exerciseSheet, cntExercises, cntCorrect, correctAnswersAverage]
-exercises.append(ex)
+t = (f'{name};{exerciseSheet};{cntExercises};{day};{cntCorrect};{correctAnswersAverage}')
+exercises += t
 
 safe_exercises(exercises)
 
