@@ -40,9 +40,23 @@ def player_entry():
 def safe_exercises(text):
     file = open('files/Aufgaben.txt', 'w')
     file.write(text)
+    file.close()
+
+
+# Einlesen der Textdatei
+
+def read_exercises(exercises):
     file = open('files/Aufgaben.txt', 'r')
     print(file.read())
+    for line in file:
+        exercises += line + '\n'
+    print(exercises)
     file.close()
+
+
+# abgleich mit Benutzer und Aufgabenblattnummer
+def number_exercises(exercises):
+    pass
 
 
 # Programmstart "Main"
@@ -72,6 +86,9 @@ print('Programm Start\n')
 
 name = input('Bitte gib deinen Namen ein: \n')
 
+read_exercises(exercises)
+number_exercises(exercises)
+
 for i in range(0, 3):
     num1 = random.randint(0, 10)
     ranOperator = random.choice(operator)
@@ -89,12 +106,12 @@ for i in range(0, 3):
         cntCorrect += 1
         correct = True
     cntExercises += 1
-    t = (f'{name};{exerciseSheet};{cntExercises};{day};{num1};{ranOperator};{num2};{entry};{result};{correct}\n')
+    t = f'{name};{exerciseSheet};{cntExercises};{day};{num1};{ranOperator};{num2};{entry};{result};{correct}\n'
     exercises += t
 
 print(f'{name} hat {cntCorrect} von {cntExercises} richtig beantwortet!\n')
 correctAnswersAverage = int(cntCorrect / cntExercises * 100)
-t = (f'{name};{exerciseSheet};{cntExercises};{day};{cntCorrect};{correctAnswersAverage}')
+t = f'{name};{exerciseSheet};{cntExercises};{day};{cntCorrect};{correctAnswersAverage}'
 exercises += t
 
 safe_exercises(exercises)
