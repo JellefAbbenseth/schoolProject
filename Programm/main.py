@@ -36,28 +36,40 @@ def player_entry():
 
 
 # Aufgaben in einer Textdatei speichern
+# Am Ende einen Zeilenumbruch einfügen
 
 def safe_exercises(text):
-    file = open('files/Aufgaben.txt', 'w')
+    file = open('files/Aufgaben.txt', 'a')
     file.write(text)
+    file.write('\n')
     file.close()
 
 
 # Einlesen der Textdatei
-
-def read_exercises(exercises):
-    file = open('files/Aufgaben.txt', 'r')
-    print(file.read())
-    for line in file:
-        exercises += line + '\n'
-    print(exercises)
-    file.close()
-
-
 # abgleich mit Benutzer und Aufgabenblattnummer
-def number_exercises(exercises):
-    pass
 
+def read_exercises(name, exerciseSheet):
+    file = open('files/Aufgaben.txt', 'r')
+    numSheet = exerciseSheet
+    lastLine = ''
+    # print('Testbeginn')
+    for line in file:
+        line = line.rstrip()
+        # print(line)
+        variables = line.split(';', 3)
+        if variables[0] == name:
+            nextLine = f'{variables[0]};{variables[1]};{variables[2]}'
+            if lastLine == nextLine:
+                if numSheet == int(variables[1]):
+                    # print(numSheet)
+                    numSheet = int(variables[1]) + 1
+                    # print(numSheet)
+            lastLine = f'{variables[0]};{variables[1]};{variables[2]}'
+    #     print(variables)
+    # print(numSheet)
+    # print('Testende')
+    file.close()
+    return numSheet
 
 # Programmstart "Main"
 # Zufallszahlen werden generiert
@@ -86,8 +98,9 @@ print('Programm Start\n')
 
 name = input('Bitte gib deinen Namen ein: \n')
 
-read_exercises(exercises)
-number_exercises(exercises)
+exerciseSheet = read_exercises(name, exerciseSheet)
+print(exerciseSheet)
+# number_exercises(exercises, name)
 
 for i in range(0, 3):
     num1 = random.randint(0, 10)
