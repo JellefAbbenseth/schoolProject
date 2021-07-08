@@ -1,4 +1,6 @@
+import sys
 from datetime import date
+from database import Database
 import random
 
 
@@ -48,28 +50,22 @@ def safe_exercises(text):
 # Einlesen der Textdatei
 # abgleich mit Benutzer und Aufgabenblattnummer
 
-def read_exercises(name, exerciseSheet):
+def read_exercises(n, ex_sh):
     file = open('files/Aufgaben.txt', 'r')
-    numSheet = exerciseSheet
-    lastLine = ''
-    # print('Testbeginn')
+    num_sheet = ex_sh
+    last_line = ''
     for line in file:
         line = line.rstrip()
-        # print(line)
         variables = line.split(';', 3)
-        if variables[0] == name:
-            nextLine = f'{variables[0]};{variables[1]};{variables[2]}'
-            if lastLine == nextLine:
-                if numSheet == int(variables[1]):
-                    # print(numSheet)
-                    numSheet = int(variables[1]) + 1
-                    # print(numSheet)
-            lastLine = f'{variables[0]};{variables[1]};{variables[2]}'
-    #     print(variables)
-    # print(numSheet)
-    # print('Testende')
+        if variables[0] == n:
+            next_line = f'{variables[0]};{variables[1]};{variables[2]}'
+            if last_line == next_line:
+                if num_sheet == int(variables[1]):
+                    num_sheet = int(variables[1]) + 1
+            last_line = f'{variables[0]};{variables[1]};{variables[2]}'
     file.close()
-    return numSheet
+    return num_sheet
+
 
 # Programmstart "Main"
 # Zufallszahlen werden generiert
@@ -96,11 +92,23 @@ exercises = ''
 
 print('Programm Start\n')
 
+# Datenbank erstellen
+# Prüfung ob der Benutzer bereits in der Datenbank enthalten ist
+# Sollte er nicht enthalten sein, Abfrage ob er erstellt werden soll
+Database.createTables()
+
 name = input('Bitte gib deinen Namen ein: \n')
+name_exists = Database.selectUser(name)
+if not name_exists:
+    new = input('Do you want to make a new user? Write Yes/No\n')
+    if new.lower() == 'yes':
+        first_name = input('Please write your first name: ')
+        last_name = input('Please write your family name: ')
+        Database.newUser(name, first_name, last_name)
+    else:
+        sys.exit()
 
 exerciseSheet = read_exercises(name, exerciseSheet)
-print(exerciseSheet)
-# number_exercises(exercises, name)
 
 for i in range(0, 3):
     num1 = random.randint(0, 10)
