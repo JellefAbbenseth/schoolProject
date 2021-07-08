@@ -8,7 +8,7 @@ cursor = connection.cursor()
 
 sql_instruction = '''
 CREATE TABLE IF NOT EXISTS user (
-UID int NOT NULL PRIMARY KEY,
+UID int AUTO_INCREMENT PRIMARY KEY,
 FirstName varchar (30),
 LastName varchar (30) NOT NULL,
 BirthDay Date,
