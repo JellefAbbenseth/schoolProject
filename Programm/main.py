@@ -1,4 +1,5 @@
 from datetime import date
+from database import Database
 import random
 
 
@@ -48,28 +49,29 @@ def safe_exercises(text):
 # Einlesen der Textdatei
 # abgleich mit Benutzer und Aufgabenblattnummer
 
-def read_exercises(name, exerciseSheet):
+def read_exercises(n, ex_sh):
     file = open('files/Aufgaben.txt', 'r')
-    numSheet = exerciseSheet
-    lastLine = ''
+    num_sheet = ex_sh
+    last_line = ''
     # print('Testbeginn')
     for line in file:
         line = line.rstrip()
         # print(line)
         variables = line.split(';', 3)
-        if variables[0] == name:
-            nextLine = f'{variables[0]};{variables[1]};{variables[2]}'
-            if lastLine == nextLine:
-                if numSheet == int(variables[1]):
-                    # print(numSheet)
-                    numSheet = int(variables[1]) + 1
-                    # print(numSheet)
-            lastLine = f'{variables[0]};{variables[1]};{variables[2]}'
+        if variables[0] == n:
+            next_line = f'{variables[0]};{variables[1]};{variables[2]}'
+            if last_line == next_line:
+                if num_sheet == int(variables[1]):
+                    # print(num_sheet)
+                    num_sheet = int(variables[1]) + 1
+                    # print(num_sheet)
+            last_line = f'{variables[0]};{variables[1]};{variables[2]}'
     #     print(variables)
-    # print(numSheet)
+    # print(num_sheet)
     # print('Testende')
     file.close()
-    return numSheet
+    return num_sheet
+
 
 # Programmstart "Main"
 # Zufallszahlen werden generiert
@@ -96,10 +98,12 @@ exercises = ''
 
 print('Programm Start\n')
 
+# Datenbank erstellen
+db = Database.createTables()
+
 name = input('Bitte gib deinen Namen ein: \n')
 
 exerciseSheet = read_exercises(name, exerciseSheet)
-
 
 for i in range(0, 3):
     num1 = random.randint(0, 10)
