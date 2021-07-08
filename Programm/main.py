@@ -53,22 +53,15 @@ def read_exercises(n, ex_sh):
     file = open('files/Aufgaben.txt', 'r')
     num_sheet = ex_sh
     last_line = ''
-    # print('Testbeginn')
     for line in file:
         line = line.rstrip()
-        # print(line)
         variables = line.split(';', 3)
         if variables[0] == n:
             next_line = f'{variables[0]};{variables[1]};{variables[2]}'
             if last_line == next_line:
                 if num_sheet == int(variables[1]):
-                    # print(num_sheet)
                     num_sheet = int(variables[1]) + 1
-                    # print(num_sheet)
             last_line = f'{variables[0]};{variables[1]};{variables[2]}'
-    #     print(variables)
-    # print(num_sheet)
-    # print('Testende')
     file.close()
     return num_sheet
 

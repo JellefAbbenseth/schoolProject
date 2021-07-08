@@ -55,3 +55,34 @@ class Database:
         connection.commit()
         connection.close()
         print('Tabellen erstellt')
+
+
+connection = sqlite3.connect('datenbank/shoolProject.db')
+cursor = connection.cursor()
+
+# sql_instruction = '''
+# INSERT INTO user VALUES ('Test', 'T', 'est')
+# '''
+# cursor.execute(sql_instruction)
+
+name = 'T'
+name_exist = False
+
+sql_instruction = f'''
+SELECT * FROM user
+'''
+
+cursor.execute(sql_instruction)
+
+content = cursor.fetchall()
+# content == 2 Dimensionalem Array
+print(content)
+for x in content:
+    if x[0] == name:
+        print(x[0])
+        name_exist = True
+
+if not name_exist:
+    print('Noch kein solcher Name vorhanden!')
+
+connection.close()
