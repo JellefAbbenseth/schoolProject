@@ -99,8 +99,7 @@ print('Programm Start\n')
 name = input('Bitte gib deinen Namen ein: \n')
 
 exerciseSheet = read_exercises(name, exerciseSheet)
-print(exerciseSheet)
-# number_exercises(exercises, name)
+
 
 for i in range(0, 3):
     num1 = random.randint(0, 10)
