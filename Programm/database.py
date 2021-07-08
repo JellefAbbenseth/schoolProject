@@ -62,35 +62,42 @@ class Database:
         connection.close()
         print('Tabellen erstellt')
 
-# Testlauf
-connection = sqlite3.connect('datenbank/shoolProject.db')
-cursor = connection.cursor()
+    @staticmethod
+    def selectUser(name):
+        connection = sqlite3.connect('datenbank/shoolProject.db')
+        cursor = connection.cursor()
 
-name = 'Test2'
-name_exist = False
+        name_exist = False
 
-sql_instruction = '''
-SELECT * FROM user
-'''
+        sql_instruction = '''
+        SELECT * FROM user
+        '''
 
-cursor.execute(sql_instruction)
+        cursor.execute(sql_instruction)
 
-content = cursor.fetchall()
-# content == 2 Dimensionalem Array
-print(content)
-for x in content:
-    if x[0] == name:
-        print(x[0])
-        name_exist = True
+        content = cursor.fetchall()
+        # content == 2 Dimensionalem Array
+        print(content)
+        for x in content:
+            if x[0] == name:
+                print(x[0])
+                name_exist = True
 
-if not name_exist:
-    print('Noch kein solcher Name vorhanden!')
-    sql_instruction = '''
-    INSERT INTO user (UserName, FirstName, LastName)
-    VALUES ('Test2', 'Te', 'st')
-    '''
-    cursor.execute(sql_instruction)
-    # connection.commit() vergessen!!
-    connection.commit()
+        if not name_exist:
+            print('Noch kein solcher Name vorhanden!')
 
-connection.close()
+        connection.close()
+        return name_exist
+
+    @staticmethod
+    def newUser(user_name, first_name, last_name):
+        connection = sqlite3.connect('datenbank/shoolProject.db')
+        cursor = connection.cursor()
+
+        sql_instruction = f'''
+            INSERT INTO user (UserName, FirstName, LastName)
+            VALUES ('{user_name}', '{first_name}', '{last_name}')
+            '''
+        cursor.execute(sql_instruction)
+        connection.commit()
+        connection.close()

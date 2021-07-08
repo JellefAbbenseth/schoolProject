@@ -1,3 +1,4 @@
+import sys
 from datetime import date
 from database import Database
 import random
@@ -92,9 +93,20 @@ exercises = ''
 print('Programm Start\n')
 
 # Datenbank erstellen
-db = Database.createTables()
+# Prüfung ob der Benutzer bereits in der Datenbank enthalten ist
+# Sollte er nicht enthalten sein, Abfrage ob er erstellt werden soll
+Database.createTables()
 
 name = input('Bitte gib deinen Namen ein: \n')
+name_exists = Database.selectUser(name)
+if not name_exists:
+    new = input('Do you want to make a new user? Write Yes/No\n')
+    if new.lower() == 'yes':
+        first_name = input('Please write your first name: ')
+        last_name = input('Please write your family name: ')
+        Database.newUser(name, first_name, last_name)
+    else:
+        sys.exit()
 
 exerciseSheet = read_exercises(name, exerciseSheet)
 
