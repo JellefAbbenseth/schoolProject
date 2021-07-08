@@ -31,7 +31,10 @@ class Database:
         Day Date NOT NULL,
         CntCorrectAnswers int NOT NULL,
         averageCorrectAnswers int NOT NULL,
-        PRIMARY KEY (Username, ExSheetNum));
+        PRIMARY KEY (Username, ExSheetNum),
+        FOREIGN KEY (UserName)
+            REFERENCES user (UserName)
+        );
         '''
         cursor.execute(sql_instruction)
 
@@ -48,7 +51,10 @@ class Database:
         Exercise String NOT NULL,
         UserEntry String NOT NULL,
         CorrectAnswer boolean NOT NULL,
-        PRIMARY KEY (ExSheetNum, CntExercise));
+        PRIMARY KEY (ExSheetNum, CntExercise),
+        FOREIGN KEY (ExSheetNum)
+            REFERENCES exerciseSheets (ExSheetNum)
+        );
         '''
         cursor.execute(sql_instruction)
 
@@ -56,19 +62,14 @@ class Database:
         connection.close()
         print('Tabellen erstellt')
 
-
+# Testlauf
 connection = sqlite3.connect('datenbank/shoolProject.db')
 cursor = connection.cursor()
 
-# sql_instruction = '''
-# INSERT INTO user VALUES ('Test', 'T', 'est')
-# '''
-# cursor.execute(sql_instruction)
-
-name = 'T'
+name = 'Test2'
 name_exist = False
 
-sql_instruction = f'''
+sql_instruction = '''
 SELECT * FROM user
 '''
 
@@ -84,5 +85,12 @@ for x in content:
 
 if not name_exist:
     print('Noch kein solcher Name vorhanden!')
+    sql_instruction = '''
+    INSERT INTO user (UserName, FirstName, LastName)
+    VALUES ('Test2', 'Te', 'st')
+    '''
+    cursor.execute(sql_instruction)
+    # connection.commit() vergessen!!
+    connection.commit()
 
 connection.close()
