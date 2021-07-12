@@ -125,7 +125,8 @@ correctAnswersAverage = 0
 exercises = ''
 
 exerciseSheet = read_exercises(name)
-exerciseSheet = db.newExercise(name, exerciseSheet, day)
+print(exerciseSheet)
+exerciseSheet = db.newExerciseSheet(name, day)
 
 for i in range(0, 3):
     num1 = random.randint(0, 10)
@@ -145,6 +146,8 @@ for i in range(0, 3):
         correct = True
     cntExercises += 1
     t = f'{name};{exerciseSheet};{cntExercises};{day};{num1};{ranOperator};{num2};{entry};{result};{correct}\n'
+    exercise = f'{num1} {ranOperator} {num2} = {result}'
+    db.newExercise(name, exerciseSheet, cntExercises, exercise, entry, correct)
     exercises += t
 
 print(f'{name} hat {cntCorrect} von {cntExercises} richtig beantwortet!\n')
@@ -152,6 +155,8 @@ correctAnswersAverage = int(cntCorrect / cntExercises * 100)
 t = f'{name};{exerciseSheet};{cntExercises};{day};{cntCorrect};{correctAnswersAverage}'
 exercises += t
 
+values = [cntCorrect, correctAnswersAverage]
+db.updateExerciseSheet(name, exerciseSheet, values)
 safe_exercises(exercises)
 
 print('\nProgrammende')
