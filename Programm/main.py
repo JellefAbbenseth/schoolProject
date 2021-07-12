@@ -1,7 +1,37 @@
-import sys
+import random
 from datetime import date
 from database import Database
-import random
+
+
+# Datenbank erstellen
+# Prüfung ob der Benutzer bereits in der Datenbank enthalten ist
+# Sollte er nicht enthalten sein, Abfrage ob er erstellt werden soll
+# Dies geschieht so lange, bis ein "Login" stattgefunden hat
+
+def player_login(database):
+    database.createTables()
+
+    login = False
+    user_name = ''
+    while not login:
+        user_name = input('Bitte gib deinen Benutzernamen ein: \n')
+        name_exists = database.selectUser(user_name)
+
+        if not name_exists:
+            new = input('Willst du einen neuen Benutzer anlegen? Schreibe Ja/Nein\n')
+            if new.lower() == 'ja':
+                first_name = input('Bitte gib deinen Vornamen an: ')
+                last_name = input('Bitte gib deinen Nachnamen an: ')
+                database.newUser(user_name, first_name, last_name)
+                print('Dein Konto wurde angelegt. Viel Spaß')
+                login = True
+            else:
+                print('Bei der Eingabe wurde ein Fehler gemacht, bitte versuche es erneut!')
+                login = False
+        else:
+            login = True
+            print('Erfolgreich angemeldet. Viel Spaß')
+    return user_name
 
 
 # Berechnung des Ergebnisses und Mitteilung an den Spieler
@@ -50,9 +80,9 @@ def safe_exercises(text):
 # Einlesen der Textdatei
 # abgleich mit Benutzer und Aufgabenblattnummer
 
-def read_exercises(n, ex_sh):
+def read_exercises(n):
     file = open('files/Aufgaben.txt', 'r')
-    num_sheet = ex_sh
+    num_sheet = 1
     last_line = ''
     for line in file:
         line = line.rstrip()
@@ -67,12 +97,17 @@ def read_exercises(n, ex_sh):
     return num_sheet
 
 
-# Programmstart "Main"
+# Programmstart "main"
 # Zufallszahlen werden generiert
 # Spieler wird aufgefordert das Ergebnis einzutragen und seinen Namen zu nennen
 # Ergebnis wird berechnet und Anzahl richtiger ausgegeben
 # Problemlösung: random.choice(operator) immer selbes Ergebnis
 #   source: https://stackoverflow.com/questions/10181932/random-choice-always-same
+
+print('Programm Start\n')
+
+db = Database()
+name = player_login(db)
 
 num1 = 0
 operator = ['+', '-', '*', '/']
@@ -84,31 +119,13 @@ cntCorrect = 0
 cntExercises = 0
 
 # Variablen für die Datenspeicherung auf der Text.txt
-exerciseSheet = 1
 day = date.today()
 correct = False
 correctAnswersAverage = 0
 exercises = ''
 
-print('Programm Start\n')
-
-# Datenbank erstellen
-# Prüfung ob der Benutzer bereits in der Datenbank enthalten ist
-# Sollte er nicht enthalten sein, Abfrage ob er erstellt werden soll
-Database.createTables()
-
-name = input('Bitte gib deinen Namen ein: \n')
-name_exists = Database.selectUser(name)
-if not name_exists:
-    new = input('Do you want to make a new user? Write Yes/No\n')
-    if new.lower() == 'yes':
-        first_name = input('Please write your first name: ')
-        last_name = input('Please write your family name: ')
-        Database.newUser(name, first_name, last_name)
-    else:
-        sys.exit()
-
-exerciseSheet = read_exercises(name, exerciseSheet)
+exerciseSheet = read_exercises(name)
+exerciseSheet = db.newExercise(name, exerciseSheet, day)
 
 for i in range(0, 3):
     num1 = random.randint(0, 10)
