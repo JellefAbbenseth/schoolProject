@@ -1,6 +1,7 @@
 import random
 from datetime import date
 from database import Database
+from difficulty import Difficulty
 
 
 # Datenbank erstellen
@@ -97,6 +98,19 @@ def read_exercises(n):
     return num_sheet
 
 
+def test_difficulty():
+    dif = Difficulty()
+    for x in range(0, 5):
+        y = x + 1
+        print('Durchlauf: ', y)
+        dif.addition(y)
+        dif.subtraction(y)
+        dif.multiplication(y)
+        dif.division(y)
+        dif.exponents(y)
+        dif.root(y)
+
+
 # Programmstart "main"
 # Zufallszahlen werden generiert
 # Spieler wird aufgefordert das Ergebnis einzutragen und seinen Namen zu nennen
@@ -105,6 +119,8 @@ def read_exercises(n):
 #   source: https://stackoverflow.com/questions/10181932/random-choice-always-same
 
 print('Programm Start\n')
+
+test_difficulty()
 
 db = Database()
 name = player_login(db)
