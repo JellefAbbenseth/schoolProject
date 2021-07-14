@@ -118,10 +118,11 @@ def test_difficulty():
 # Ergebnis wird berechnet und Anzahl richtiger ausgegeben
 # Problemlösung: random.choice(operator) immer selbes Ergebnis
 #   source: https://stackoverflow.com/questions/10181932/random-choice-always-same
+# Ändern db.newExercise
 
 print('Programm Start\n')
 
-test_difficulty()
+# test_difficulty()
 
 db = Database()
 name = player_login(db)
