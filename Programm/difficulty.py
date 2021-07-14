@@ -1,6 +1,11 @@
 import random
 
 
+# Es sind verschiedene Aufgaben vorbereitet
+# Diese werden anhand von festen Regeln mit Zufallszahlen erstellt
+# Hier werden die wichtigsten Aufgabenarten gestellt
+# Addition, Subtraktion, Division, Multiplikation, Potenzen, Wurzeln und Kettenrechnungen
+
 class Difficulty:
     subject_area = 1
     topic = 1
@@ -14,6 +19,7 @@ class Difficulty:
         pass
 
     def addition(self, niveau):
+        self.subject_area = 1
         if niveau == 1:
             self.upper_limit = 10
         elif niveau == 2:
@@ -32,6 +38,7 @@ class Difficulty:
         print(result)
 
     def subtraction(self, niveau):
+        self.subject_area = 2
         if niveau == 1:
             self.upper_limit = 10
         elif niveau == 2:
@@ -50,6 +57,7 @@ class Difficulty:
         print(result)
 
     def multiplication(self, niveau):
+        self.subject_area = 3
         if niveau == 1:
             self.upper_limit = 10
             self.upper_limit_two = 10
@@ -73,6 +81,7 @@ class Difficulty:
         print(result)
 
     def division(self, niveau):
+        self.subject_area = 3
         if niveau == 1:
             self.upper_limit = 10
         elif niveau == 2:
@@ -95,6 +104,7 @@ class Difficulty:
         print(result)
 
     def exponents(self, niveau):
+        self.subject_area = 4
         if niveau == 1:
             self.upper_limit = 10
             self.upper_limit_two = 1
@@ -118,6 +128,7 @@ class Difficulty:
         print(result)
 
     def root(self, niveau):
+        self.subject_area = 4
         num2 = 2
         if niveau == 1:
             self.upper_limit = 5
@@ -138,6 +149,7 @@ class Difficulty:
         print(num1)
 
     def chainFunctions(self, niveau):
+        self.subject_area = 3
         text = ''
         result = 0
         self.upper_limit = 1000
