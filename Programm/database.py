@@ -47,23 +47,49 @@ class Database:
         '''
         cursor.execute(sql_instruction)
 
+        # Erstellen der Datenbanktabelle Subjects
+        # enthält:
+        # SID (Key)
+        # Name (F-Key)
+        # SubjectArea, Topic, Niveau
+
+        sql_instruction = '''
+        CREATE TABLE IF NOT EXISTS subjects (
+        SID INTEGER PRIMARY KEY AUTOINCREMENT,
+        Username varchar (30) NOT NULL,
+        SubjectArea int,
+        Topic int,
+        Niveau int,
+        FOREIGN KEY (Username)
+            REFERENCES user (Username)
+        );
+        '''
+        cursor.execute(sql_instruction)
+
         # Erstellen der Datenbanktabelle Aufgaben
         # enthält:
-        #   (ex_sheet_num (F-KEY), cnt_exercise) Key
-        #   exercise (num1 + operator + num2 + result as String)
-        #   UserEntry (entry), correct (boolean)
+        #   ExID (Key)
+        #   ExSheetNum (F-KEY), cnt_exercise
+        #   Exercise (num1 + operator + num2 + result as String)
+        #   UserEntry (entry), Correct (boolean)
+        #   SubjectArea, Topic, Niveau
 
         sql_instruction = '''
         CREATE TABLE IF NOT EXISTS exercises (
+        ExID INTEGER PRIMARY KEY AUTOINCREMENT,
         Username varchar (30) NOT NULL,
         ExSheetNum int NOT NULL,
         CntExercise int NOT NULL,
         Exercise String NOT NULL,
         UserEntry String NOT NULL,
         CorrectAnswer boolean NOT NULL,
-        PRIMARY KEY (Username, ExSheetNum, CntExercise),
+        SubjectArea int,
+        Topic int,
+        Niveau,
         FOREIGN KEY (Username, ExSheetNum)
-            REFERENCES exerciseSheets (Username, ExSheetNum)
+            REFERENCES exerciseSheets (Username, ExSheetNum),
+        FOREIGN KEY (SubjectArea, Topic, Niveau)
+            REFERENCES subjects (SubjectArea, Topic, Niveau)
         );
         '''
         cursor.execute(sql_instruction)
@@ -160,8 +186,9 @@ class Database:
         cursor = connection.cursor()
 
         sql_instruction = f'''
-            INSERT INTO exercises (Username, ExSheetNum, CntExercise, Exercise, UserEntry, CorrectAnswer)
-            VALUES('{name}', '{ex_sheet_num}', '{cnt_exercise}', '{exercise}', '{entry}', '{correct}')
+            INSERT INTO exercises (Username, ExSheetNum, CntExercise, Exercise, UserEntry, CorrectAnswer,
+            SubjectArea, Topic, Niveau)
+            VALUES('{name}', '{ex_sheet_num}', '{cnt_exercise}', '{exercise}', '{entry}', '{correct}', '1', '1', '1')
             '''
 
         cursor.execute(sql_instruction)
@@ -186,6 +213,17 @@ class Database:
             AverageCorrectAnswers = {average_correct_answers}
             WHERE Username = '{name}' AND ExSheetNum ='{ex_sheet_num}'            
             '''
+        cursor.execute(sql_instruction)
+
+        connection.commit()
+        connection.close()
+
+    def changesDifficulty(self, SubjectArea, Topic, Niveau):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+
+        sql_instruction = ''
+
         cursor.execute(sql_instruction)
 
         connection.commit()
