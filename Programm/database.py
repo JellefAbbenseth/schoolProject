@@ -140,6 +140,13 @@ class Database:
             VALUES ('{user_name}', '{first_name}', '{last_name}')
             '''
         cursor.execute(sql_instruction)
+
+        sql_instruction = f'''
+            INSERT INTO subjects (Username, SubjectArea, Topic, Niveau)
+            VALUES ('{user_name}', '1', '1', '1')
+            '''
+        cursor.execute(sql_instruction)
+
         self.new_user = True
         connection.commit()
         connection.close()
@@ -218,13 +225,45 @@ class Database:
         connection.commit()
         connection.close()
 
-    def changesDifficulty(self, SubjectArea, Topic, Niveau):
+    # Feststellen, ob ein Benutzer bereits ein Thema bearbeitet hat
+    # Bei bedarf das Niveau des Themas anpassen
+    # Bei neuem Thema neuen Eintrag in der Datenbank
+
+    @staticmethod
+    def changeDifficulty(user_name, subject_area, topic, niveau):
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
 
-        sql_instruction = ''
+        subject_area_exists = False
 
+        sql_instruction = '''
+            SELECT * FROM subjects
+            '''
         cursor.execute(sql_instruction)
+        content = cursor.fetchall()
+
+        for x in content:
+            if x[1] == user_name and x[2] == subject_area:
+                if x[3] == topic:
+                    subject_area_exists = True
+                    if x[4] == niveau:
+                        subject_area_exists = True
+                    else:
+                        sql_instruction = f'''
+                            UPDATE subjects
+                            SET Niveau = {niveau}
+                            WHERE Username = '{x[0]}'
+                            '''
+                        cursor.execute(sql_instruction)
+                else:
+                    subject_area_exists = False
+
+        if not subject_area_exists:
+            sql_instruction = f'''
+                INSERT INTO subjects (Username, SubjectArea, Topic, Niveau)
+                VALUES ('{user_name}', '{subject_area}', '{topic}', '1')
+                '''
+            cursor.execute(sql_instruction)
 
         connection.commit()
         connection.close()
