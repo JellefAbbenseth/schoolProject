@@ -15,8 +15,8 @@ class Difficulty:
     upper_limit = 10
     upper_limit_two = 10
 
-    def __init__(self):
-        pass
+    def __init__(self, list_subjects):
+        self.list_subjects = list_subjects
 
     def addition(self, niveau):
         self.subject_area = 1
@@ -198,3 +198,37 @@ class Difficulty:
 
         print(text)
         print(result)
+
+    # Wahl der Aufgaben
+    # Ab 3 freigeschalteten Aufgaben kann zwischen zufälligen Aufgaben und
+    # einem Wunschthema entschieden werden
+
+    def chooseExercise(self):
+        print(self.list_subjects)
+        if len(self.list_subjects) <= 3:
+            if len(self.list_subjects) == 1:
+                for x in range(0, 7):
+                    self.addition(self.list_subjects[0][4])
+                for x in range(0, 3):
+                    self.addition(self.list_subjects[0][4] + 1)
+            else:
+                for x in range(0, 7):
+                    choice = random.randint(0, 1)
+                    if choice == 0:
+                        self.addition(self.list_subjects[0][4])
+                    elif choice == 1:
+                        self.subtraction(self.list_subjects[1][4])
+                for x in range(0, 3):
+                    choice = random.randint(0, 1)
+                    if choice == 0:
+                        self.addition(self.list_subjects[0][4] + 1)
+                    elif choice == 1:
+                        self.subtraction(self.list_subjects[1][4] + 1)
+        else:
+            choice = input('Bitte treffe eine Wahl:\n'
+                           '1 zufällige Aufgaben\n'
+                           '2 Thema wählen')
+            if choice == 1:
+                print('Zufall')
+            else:
+                print('Wahl')

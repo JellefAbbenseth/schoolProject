@@ -98,18 +98,18 @@ def read_exercises(n):
     return num_sheet
 
 
-def test_difficulty():
-    dif = Difficulty()
-    for x in range(0, 5):
-        y = x + 1
-        print('Durchlauf: ', y)
-        dif.addition(y)
-        dif.subtraction(y)
-        dif.multiplication(y)
-        dif.division(y)
-        dif.exponents(y)
-        dif.root(y)
-        dif.chainFunctions(y)
+# def test_difficulty():
+#     dif = Difficulty()
+#     for x in range(0, 5):
+#         y = x + 1
+#         print('Durchlauf: ', y)
+#         dif.addition(y)
+#         dif.subtraction(y)
+#         dif.multiplication(y)
+#         dif.division(y)
+#         dif.exponents(y)
+#         dif.root(y)
+#         dif.chainFunctions(y)
 
 
 # Programmstart "main"
@@ -126,6 +126,9 @@ print('Programm Start\n')
 
 db = Database()
 name = player_login(db)
+list_subjects = db.actualNiveau()
+dif = Difficulty(list_subjects)
+dif.chooseExercise()
 # print('Test actual difficulty')
 # # db.changeDifficulty(1, 1, 3)
 # list_subjects = db.actualNiveau(name)
