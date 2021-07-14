@@ -7,6 +7,8 @@ import sqlite3
 
 class Database:
     new_user: bool = False
+    list_subjects = list()
+    user_name = 'Test'
 
     def __init__(self):
         pass
@@ -57,9 +59,11 @@ class Database:
         CREATE TABLE IF NOT EXISTS subjects (
         SID INTEGER PRIMARY KEY AUTOINCREMENT,
         Username varchar (30) NOT NULL,
-        SubjectArea int,
-        Topic int,
-        Niveau int,
+        SubjectArea int NOT NULL,
+        Topic int NOT NULL,
+        Niveau int NOT NULL,
+        NumberExercises int DEFAULT 0,
+        AverageCorrect int DEFAULT 100,
         FOREIGN KEY (Username)
             REFERENCES user (Username)
         );
@@ -146,6 +150,7 @@ class Database:
             VALUES ('{user_name}', '1', '1', '1')
             '''
         cursor.execute(sql_instruction)
+        self.user_name = user_name
 
         self.new_user = True
         connection.commit()
@@ -157,7 +162,7 @@ class Database:
     # ein neuer User erhält direkt sein erstes Aufgabenblatt
     # !! Hinweis: Keine Prüfung ob unvollständige Datensätze vorliegen !!
 
-    def newExerciseSheet(self, user_name, day):
+    def newExerciseSheet(self, day):
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
         if self.new_user:
@@ -166,7 +171,7 @@ class Database:
         else:
             sql_instruction = f'''
             SELECT COUNT() from exerciseSheets
-            WHERE Username = '{user_name}'
+            WHERE Username = '{self.user_name}'
             '''
             cursor.execute(sql_instruction)
             content = cursor.fetchall()
@@ -175,7 +180,7 @@ class Database:
 
         sql_instruction = f'''
             INSERT INTO exerciseSheets (UserName, ExSheetNum, Day)
-            VALUES ('{user_name}', '{exercise_sheet_num}', '{day}')
+            VALUES ('{self.user_name}', '{exercise_sheet_num}', '{day}')
             '''
         cursor.execute(sql_instruction)
 
@@ -187,16 +192,15 @@ class Database:
     # Erstellt die Einträge der Aufgaben in der Datenbank
     # Keine Prüfung auf enthaltene Daten
 
-    @staticmethod
-    def newExercise(name, ex_sheet_num, cnt_exercise, exercise, entry, correct):
+    def newExercise(self, ex_sheet_num, cnt_exercise, exercise, entry, correct):
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
 
         sql_instruction = f'''
             INSERT INTO exercises (Username, ExSheetNum, CntExercise, Exercise, UserEntry, CorrectAnswer,
             SubjectArea, Topic, Niveau)
-            VALUES('{name}', '{ex_sheet_num}', '{cnt_exercise}', '{exercise}', '{entry}', '{correct}', '1', '1', '1')
-            '''
+            VALUES('{self.user_name}', '{ex_sheet_num}', '{cnt_exercise}', '{exercise}', '{entry}', '{correct}', '1', 
+            '1', '1') '''
 
         cursor.execute(sql_instruction)
 
@@ -205,8 +209,7 @@ class Database:
 
     # Ergänzen der fehlenden Information von exerciseSheets der Datenbank
 
-    @staticmethod
-    def updateExerciseSheet(name, ex_sheet_num, values):
+    def updateExerciseSheet(self, ex_sheet_num, values):
         cnt_correct_answers = values[0]
         average_correct_answers = values[1]
         print(f'{cnt_correct_answers}, {average_correct_answers}')
@@ -218,7 +221,7 @@ class Database:
             UPDATE exerciseSheets
             SET CntCorrectAnswers = {cnt_correct_answers},
             AverageCorrectAnswers = {average_correct_answers}
-            WHERE Username = '{name}' AND ExSheetNum ='{ex_sheet_num}'            
+            WHERE Username = '{self.user_name}' AND ExSheetNum ='{ex_sheet_num}'            
             '''
         cursor.execute(sql_instruction)
 
@@ -229,8 +232,7 @@ class Database:
     # Bei bedarf das Niveau des Themas anpassen
     # Bei neuem Thema neuen Eintrag in der Datenbank
 
-    @staticmethod
-    def changeDifficulty(user_name, subject_area, topic, niveau):
+    def changeDifficulty(self, subject_area, topic, niveau):
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
 
@@ -238,7 +240,7 @@ class Database:
 
         sql_instruction = f'''
             SELECT * FROM subjects
-            WHERE Username = '{user_name}'
+            WHERE Username = '{self.user_name}'
             '''
         cursor.execute(sql_instruction)
         content = cursor.fetchall()
@@ -262,15 +264,18 @@ class Database:
         if not subject_area_exists:
             sql_instruction = f'''
                 INSERT INTO subjects (Username, SubjectArea, Topic, Niveau)
-                VALUES ('{user_name}', '{subject_area}', '{topic}', '1')
+                VALUES ('{self.user_name}', '{subject_area}', '{topic}', '1')
                 '''
             cursor.execute(sql_instruction)
 
         connection.commit()
         connection.close()
 
-    @staticmethod
-    def actualNiveau(user_name):
+    # Gibt eine Liste mit den gesamten Themengebieten zurück
+    # Niveau 6 wird weggelassen, da davon ausgegangen wird, dass das Thema vollständig verstanden ist
+    # Es werden nur die Themengebiete des Nutzers zurückgegeben
+
+    def actualNiveau(self, user_name):
 
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
@@ -282,8 +287,25 @@ class Database:
             '''
         cursor.execute(sql_instruction)
         list_subjects = cursor.fetchall()
+        self.list_subjects = list_subjects
 
         connection.commit()
         connection.close()
 
         return list_subjects
+
+    # Wahl der Aufgaben
+    # Ab 3 freigeschalteten Aufgaben kann zwischen zufälligen Aufgaben und
+    # einem Wunschthema entschieden werden
+
+    def chooseExercise(self):
+        if len(self.list_subjects) <= 3:
+            pass
+        else:
+            choice = input('Bitte treffe eine Wahl:\n'
+                           '1 zufällige Aufgaben\n'
+                           '2 Thema wählen')
+            if choice == 1:
+                print('Zufall')
+            else:
+                print('Wahl')
