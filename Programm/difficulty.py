@@ -136,3 +136,53 @@ class Difficulty:
         result = num1 ** num2
         print(f'{result} ^ 1/{num2} = ')
         print(num1)
+
+    def chainFunctions(self, niveau):
+        text = ''
+        result = 0
+        self.upper_limit = 1000
+        if niveau == 1 or niveau == 2:
+            amount = random.randint(2, 3)
+        elif niveau == 3:
+            amount = random.randint(2, 4)
+        else:
+            amount = random.randint(2, niveau)
+
+        if amount == 2:
+            num1 = random.randint(self.lower_limit, self.upper_limit)
+            num2 = random.randint(self.lower_limit, self.upper_limit)
+            result = num1 + num2
+            text = f'{num1} + {num2} = '
+        elif amount == 3 and niveau == 1:
+            num1 = random.randint(self.lower_limit, self.upper_limit)
+            num2 = random.randint(self.lower_limit, self.upper_limit)
+            num3 = random.randint(self.lower_limit, self.upper_limit)
+            result = num1 + num2 + num3
+            text = f'{num1} + {num2} + {num3} = '
+        elif amount == 3 and niveau == 2:
+            num1 = random.randint(self.lower_limit, self.upper_limit)
+            num2 = random.randint(self.lower_limit, self.upper_limit)
+            num3 = random.randint(self.lower_limit, self.upper_limit)
+            result = num1 + num2 - num3
+            text = f'{num1} + {num2} - {num3} = '
+        elif amount == 4:
+            num1 = random.randint(self.lower_limit, self.upper_limit)
+            num2 = random.randint(self.lower_limit, self.upper_limit)
+            num3 = random.randint(self.lower_limit, self.upper_limit)
+            num4 = random.randint(self.lower_limit, 10)
+            result = (num1 + num2 - num3) * num4
+            text = f'({num1} + {num2} - {num3}) * {num4} = '
+        elif amount == 5:
+            num1 = random.randint(self.lower_limit, self.upper_limit)
+            num2 = random.randint(self.lower_limit, self.upper_limit)
+            num3 = random.randint(self.lower_limit, self.upper_limit)
+            num4 = random.randint(self.lower_limit, 10)
+            num5 = random.randint(1, 10)
+            result = (num1 + num2 - num3) * num4
+            while result % num5 != 0:
+                num5 = random.randint(self.lower_limit, self.upper_limit)
+            result = result / num5
+            text = f'({num1} + {num2} - {num3}) * {num4} / {num5} = '
+
+        print(text)
+        print(result)

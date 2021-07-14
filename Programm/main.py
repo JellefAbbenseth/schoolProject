@@ -109,6 +109,7 @@ def test_difficulty():
         dif.division(y)
         dif.exponents(y)
         dif.root(y)
+        dif.chainFunctions(y)
 
 
 # Programmstart "main"
