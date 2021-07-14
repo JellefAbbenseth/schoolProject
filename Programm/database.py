@@ -236,14 +236,15 @@ class Database:
 
         subject_area_exists = False
 
-        sql_instruction = '''
+        sql_instruction = f'''
             SELECT * FROM subjects
+            WHERE Username = '{user_name}'
             '''
         cursor.execute(sql_instruction)
         content = cursor.fetchall()
 
         for x in content:
-            if x[1] == user_name and x[2] == subject_area:
+            if x[2] == subject_area:
                 if x[3] == topic:
                     subject_area_exists = True
                     if x[4] == niveau:
@@ -252,7 +253,7 @@ class Database:
                         sql_instruction = f'''
                             UPDATE subjects
                             SET Niveau = {niveau}
-                            WHERE Username = '{x[0]}'
+                            WHERE SID = '{x[0]}'
                             '''
                         cursor.execute(sql_instruction)
                 else:

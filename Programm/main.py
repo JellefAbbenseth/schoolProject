@@ -126,6 +126,9 @@ print('Programm Start\n')
 
 db = Database()
 name = player_login(db)
+print('Test change difficulty')
+db.changeDifficulty('Test', 1, 1, 2)
+print('Test ende')
 
 num1 = 0
 operator = ['+', '-', '*', '/']
