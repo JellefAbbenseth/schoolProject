@@ -268,3 +268,22 @@ class Database:
 
         connection.commit()
         connection.close()
+
+    @staticmethod
+    def actualNiveau(user_name):
+
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+
+        sql_instruction = f'''
+            SELECT * FROM subjects
+            WHERE Username = '{user_name}'
+                AND NOT Niveau = '6'
+            '''
+        cursor.execute(sql_instruction)
+        list_subjects = cursor.fetchall()
+
+        connection.commit()
+        connection.close()
+
+        return list_subjects

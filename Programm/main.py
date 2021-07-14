@@ -126,8 +126,11 @@ print('Programm Start\n')
 
 db = Database()
 name = player_login(db)
-print('Test change difficulty')
-db.changeDifficulty('Test', 1, 1, 2)
+print('Test actual difficulty')
+db.changeDifficulty('Test', 1, 1, 3)
+list_subjects = db.actualNiveau(name)
+print(len(list_subjects))
+print(list_subjects)
 print('Test ende')
 
 num1 = 0
