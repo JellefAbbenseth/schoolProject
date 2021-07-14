@@ -105,8 +105,8 @@ class Database:
     # selectUser ermöglicht das Suchen und Finden eines bestehenden Datensatzes
     # Weiterhin prüft es, ob bereits ein User mit dem übergebenen Wert besteht
 
-    @staticmethod
-    def selectUser(name):
+    def selectUser(self, name):
+        self.user_name = name
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
 
@@ -275,14 +275,14 @@ class Database:
     # Niveau 6 wird weggelassen, da davon ausgegangen wird, dass das Thema vollständig verstanden ist
     # Es werden nur die Themengebiete des Nutzers zurückgegeben
 
-    def actualNiveau(self, user_name):
+    def actualNiveau(self):
 
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
 
         sql_instruction = f'''
             SELECT * FROM subjects
-            WHERE Username = '{user_name}'
+            WHERE Username = '{self.user_name}'
                 AND NOT Niveau = '6'
             '''
         cursor.execute(sql_instruction)
@@ -293,19 +293,3 @@ class Database:
         connection.close()
 
         return list_subjects
-
-    # Wahl der Aufgaben
-    # Ab 3 freigeschalteten Aufgaben kann zwischen zufälligen Aufgaben und
-    # einem Wunschthema entschieden werden
-
-    def chooseExercise(self):
-        if len(self.list_subjects) <= 3:
-            pass
-        else:
-            choice = input('Bitte treffe eine Wahl:\n'
-                           '1 zufällige Aufgaben\n'
-                           '2 Thema wählen')
-            if choice == 1:
-                print('Zufall')
-            else:
-                print('Wahl')
