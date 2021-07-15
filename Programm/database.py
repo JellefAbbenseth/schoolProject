@@ -378,5 +378,23 @@ class Database:
                             '''
             cursor.execute(sql_instruction)
 
+            if self.list_subjects[len(self.list_subjects)-1][4] > 3:
+                print('Glückwunsch, neues Thema freigeschaltet!')
+                if self.list_subjects[len(self.list_subjects)-1][2] == 1:
+                    self.changeDifficulty(2, 1, 1)
+                elif self.list_subjects[len(self.list_subjects)-1][2] == 2:
+                    self.changeDifficulty(3, 1, 1)
+                elif self.list_subjects[len(self.list_subjects)-1][2] == 3 and self.list_subjects[len(self.list_subjects)-1][3] == 1:
+                    self.changeDifficulty(3, 2, 1)
+                elif self.list_subjects[len(self.list_subjects)-1][2] == 3 and self.list_subjects[len(self.list_subjects)-1][3] == 2:
+                    self.changeDifficulty(3, 3, 1)
+                elif self.list_subjects[len(self.list_subjects)-1][2] == 3 and self.list_subjects[len(self.list_subjects)-1][3] == 3:
+                    self.changeDifficulty(4, 1, 1)
+                elif self.list_subjects[len(self.list_subjects)-1][2] == 4 and self.list_subjects[len(self.list_subjects)-1][3] == 1:
+                    self.changeDifficulty(4, 2, 1)
+                else:
+                    print('Glückwunsch, alle möglichen Themen freigeschaltet.\n'
+                          'Weiterhin viel Spaß mit den Übungen.')
+
         connection.commit()
         connection.close()
