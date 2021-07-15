@@ -6,12 +6,12 @@ import sqlite3
 # Sie ermöglicht das Auslesen und Erstellen von Einträgen in der Datenbank
 
 class Database:
-    new_user: bool = False
-    list_subjects = list()
-    user_name = 'Test'
-
     def __init__(self):
-        pass
+        self.new_user: bool = False
+        self.list_subjects = list()
+        self.exercises = list()
+        self.user_name = 'Test'
+        self.exercise_sheet_num = 1
 
     @staticmethod
     def createTables():
@@ -167,7 +167,7 @@ class Database:
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
         if self.new_user:
-            exercise_sheet_num = 1
+            self.exercise_sheet_num = 1
             self.new_user = False
         else:
             sql_instruction = f'''
@@ -176,19 +176,19 @@ class Database:
             '''
             cursor.execute(sql_instruction)
             content = cursor.fetchall()
-            exercise_sheet_num = content[0][0] + 1
-            print(exercise_sheet_num)
+            self.exercise_sheet_num = content[0][0] + 1
+            print(self.exercise_sheet_num)
 
         sql_instruction = f'''
             INSERT INTO exerciseSheets (UserName, ExSheetNum, Day)
-            VALUES ('{self.user_name}', '{exercise_sheet_num}', '{day}')
+            VALUES ('{self.user_name}', '{self.exercise_sheet_num}', '{day}')
             '''
         cursor.execute(sql_instruction)
 
         connection.commit()
         connection.close()
 
-        return exercise_sheet_num
+        return self.exercise_sheet_num
 
     # Erstellt die Einträge der Aufgaben in der Datenbank
     # Keine Prüfung auf enthaltene Daten
@@ -208,9 +208,49 @@ class Database:
         connection.commit()
         connection.close()
 
+    # Entnehme die Aufgaben aus der Datenbank
+    # Speichern als Liste
+
+    def getExercises(self):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+
+        num = self.exercise_sheet_num
+        sql_instruction = f'''
+            SELECT * FROM exercises
+            WHERE Username = '{self.user_name}' AND ExSheetNum LIKE '{num}'
+            '''
+
+        cursor.execute(sql_instruction)
+        self.exercises = cursor.fetchall()
+
+        connection.commit()
+        connection.close()
+        return self.exercises
+
+    # Ergänzen der fehlenden Informationen von exercises
+
+    def updateExercises(self, answers, solution_answers):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+
+        for x in range(0, len(self.exercises)):
+            y = x + 1
+            sql_instruction = f'''
+                UPDATE exercises
+                SET UserEntry = '{answers[x]}',
+                CorrectAnswer = {solution_answers[x]}
+                WHERE Username = '{self.user_name}' AND ExSheetNum = '{self.exercise_sheet_num}'
+                    AND CntExercise = '{y}'
+                '''
+            cursor.execute(sql_instruction)
+
+        connection.commit()
+        connection.close()
+
     # Ergänzen der fehlenden Information von exerciseSheets der Datenbank
 
-    def updateExerciseSheet(self, ex_sheet_num, values):
+    def updateExerciseSheet(self, values):
         cnt_correct_answers = values[0]
         average_correct_answers = values[1]
         print(f'{cnt_correct_answers}, {average_correct_answers}')
@@ -222,7 +262,7 @@ class Database:
             UPDATE exerciseSheets
             SET CntCorrectAnswers = {cnt_correct_answers},
             AverageCorrectAnswers = {average_correct_answers}
-            WHERE Username = '{self.user_name}' AND ExSheetNum ='{ex_sheet_num}'            
+            WHERE Username = '{self.user_name}' AND ExSheetNum ='{self.exercise_sheet_num}'            
             '''
         cursor.execute(sql_instruction)
 
@@ -277,7 +317,6 @@ class Database:
     # Es werden nur die Themengebiete des Nutzers zurückgegeben
 
     def actualNiveau(self):
-
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
 
@@ -294,3 +333,50 @@ class Database:
         connection.close()
 
         return list_subjects
+
+    # Prüfen ob in einem Themenbereich eine höhere Stufe erreicht wurde
+    # Anpassen der abgeschlossenen Aufgaben
+
+    def changeNiveau(self):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+        for x in range(0, len(self.list_subjects)):
+            sql_instruction = f'''
+                        SELECT * FROM exercises
+                        WHERE Username = '{self.user_name}'
+                            AND SubjectArea = '{self.list_subjects[x][2]}'
+                            AND Topic = '{self.list_subjects[x][3]}'
+                            AND Niveau = '{self.list_subjects[x][4]+1}'
+                        '''
+            cursor.execute(sql_instruction)
+            exercises = cursor.fetchall()
+            print(exercises)
+            correct_answers = 0
+            for y in exercises:
+                if y[7] == 1:
+                    correct_answers += 1
+            average_correct = int(correct_answers / len(exercises) * 100)
+            print(f'Durchschnitt: {average_correct}')
+            if len(exercises) <= 5 and average_correct <= 80:
+                sql_instruction = f'''
+                            Update subjects
+                            SET NumberExercises = '{len(exercises)}',
+                                AverageCorrect = '{average_correct}'
+                            WHERE SID = '{self.list_subjects[x][0]}'
+                            '''
+            else:
+                print(f'Glückwunsch, du hast {len(exercises)} Aufgaben durchschnittlich'
+                      f'zu {average_correct} prozent richtig.\n'
+                      f'Du bist im Thema {self.list_subjects[x][2]} {self.list_subjects[x][3]} '
+                      f'nun auf Niveau {self.list_subjects[x][4]+1} aufgestiegen.')
+                sql_instruction = f'''
+                            Update subjects
+                            SET Niveau = '{self.list_subjects[x][4]+1}',
+                                NumberExercises = 0,
+                                AverageCorrect = 100
+                            WHERE SID = '{self.list_subjects[x][0]}'
+                            '''
+            cursor.execute(sql_instruction)
+
+        connection.commit()
+        connection.close()

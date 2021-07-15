@@ -1,5 +1,5 @@
-import random
-from datetime import date
+# import random
+# from datetime import date
 from database import Database
 from difficulty import Difficulty
 
@@ -129,7 +129,8 @@ name = player_login(db)
 list_subjects = db.actualNiveau()
 print(len(list_subjects))
 dif = Difficulty(db, list_subjects)
-dif.chooseExercise()
+dif.chooseExercises()
+dif.answerExercises()
 # print('Test actual difficulty')
 # # db.changeDifficulty(1, 1, 3)
 # list_subjects = db.actualNiveau(name)

@@ -233,7 +233,7 @@ class Difficulty:
     # Eintrag neues Aufgabenblatt in Datenbank
     # Aufgabennummer hinzugefügt cnt_exercise
 
-    def chooseExercise(self):
+    def chooseExercises(self):
         self.exerciseSheet = self.db.newExerciseSheet(self.day)
         print(self.list_subjects)
         if len(self.list_subjects) < 3:
@@ -356,3 +356,28 @@ class Difficulty:
                     elif choice == 6:
                         self.root(self.list_subjects[6][4] + 1)
         # db.updateExerciseSheet(exerciseSheet, values)
+
+    def answerExercises(self):
+        exercises = self.db.getExercises()
+        print(exercises)
+        answers = list()
+        solution_answers = list()
+        cnt_correct_answers = 0
+        for x in exercises:
+            answers.append(input(f'{x[4]}\n'))
+            if int(answers[len(answers)-1]) != int(x[5]):
+                solution_answers.append(False)
+            else:
+                cnt_correct_answers += 1
+                solution_answers.append(True)
+        print(exercises)
+        print(answers)
+        print(solution_answers)
+        print(cnt_correct_answers)
+
+        self.db.updateExercises(answers, solution_answers)
+
+        correct_answers_average = int(cnt_correct_answers / len(exercises) * 100)
+        values = [cnt_correct_answers, correct_answers_average]
+        self.db.updateExerciseSheet(values)
+        self.db.changeNiveau()
