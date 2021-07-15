@@ -7,6 +7,8 @@ import random
 # Addition, Subtraktion, Division, Multiplikation, Potenzen, Wurzeln und Kettenrechnungen
 
 class Difficulty:
+    topic_names = ['Addition', 'Subtraktion', 'Multiplikation', 'Division', 'Rechenketten',
+                   'Potenzen', 'Wurzeln']
     subject_area = 1
     topic = 1
     niveau = 1
@@ -205,7 +207,7 @@ class Difficulty:
 
     def chooseExercise(self):
         print(self.list_subjects)
-        if len(self.list_subjects) <= 3:
+        if len(self.list_subjects) < 3:
             if len(self.list_subjects) == 1:
                 for x in range(0, 7):
                     self.addition(self.list_subjects[0][4])
@@ -227,8 +229,73 @@ class Difficulty:
         else:
             choice = input('Bitte treffe eine Wahl:\n'
                            '1 zufällige Aufgaben\n'
-                           '2 Thema wählen')
-            if choice == 1:
+                           '2 Thema wählen\n')
+            if choice == '1':
                 print('Zufall')
+                for x in range(0, 7):
+                    choice = random.randint(0, len(self.list_subjects) - 1)
+                    if choice == 0:
+                        self.addition(self.list_subjects[0][4])
+                    elif choice == 1:
+                        self.subtraction(self.list_subjects[1][4])
+                    elif choice == 2:
+                        self.multiplication(self.list_subjects[2][4])
+                    elif choice == 3:
+                        self.division(self.list_subjects[3][4])
+                    elif choice == 4:
+                        self.chainFunctions(self.list_subjects[4][4])
+                    elif choice == 5:
+                        self.exponents(self.list_subjects[5][4])
+                    elif choice == 6:
+                        self.root(self.list_subjects[6][4])
+                for x in range(0, 3):
+                    choice = random.randint(0, len(self.list_subjects) - 1)
+                    if choice == 0:
+                        self.addition(self.list_subjects[0][4] + 1)
+                    elif choice == 1:
+                        self.subtraction(self.list_subjects[1][4] + 1)
+                    elif choice == 2:
+                        self.multiplication(self.list_subjects[2][4] + 1)
+                    elif choice == 3:
+                        self.division(self.list_subjects[3][4] + 1)
+                    elif choice == 4:
+                        self.chainFunctions(self.list_subjects[4][4] + 1)
+                    elif choice == 5:
+                        self.exponents(self.list_subjects[5][4] + 1)
+                    elif choice == 6:
+                        self.root(self.list_subjects[6][4] + 1)
             else:
-                print('Wahl')
+                print('Bitte triff eine Themenauswahl:')
+                for x in range(0, len(self.list_subjects) - 1):
+                    print(f'{x} {self.topic_names[x]}')
+                choice = int(input())
+                for x in range(0, 7):
+                    if choice == 0:
+                        self.addition(self.list_subjects[0][4])
+                    elif choice == 1:
+                        self.subtraction(self.list_subjects[1][4])
+                    elif choice == 2:
+                        self.multiplication(self.list_subjects[2][4])
+                    elif choice == 3:
+                        self.division(self.list_subjects[3][4])
+                    elif choice == 4:
+                        self.chainFunctions(self.list_subjects[4][4])
+                    elif choice == 5:
+                        self.exponents(self.list_subjects[5][4])
+                    elif choice == 6:
+                        self.root(self.list_subjects[6][4])
+                for x in range(0, 3):
+                    if choice == 0:
+                        self.addition(self.list_subjects[0][4] + 1)
+                    elif choice == 1:
+                        self.subtraction(self.list_subjects[1][4] + 1)
+                    elif choice == 2:
+                        self.multiplication(self.list_subjects[2][4] + 1)
+                    elif choice == 3:
+                        self.division(self.list_subjects[3][4] + 1)
+                    elif choice == 4:
+                        self.chainFunctions(self.list_subjects[4][4] + 1)
+                    elif choice == 5:
+                        self.exponents(self.list_subjects[5][4] + 1)
+                    elif choice == 6:
+                        self.root(self.list_subjects[6][4] + 1)
