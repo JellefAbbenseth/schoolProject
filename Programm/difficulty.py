@@ -204,6 +204,7 @@ class Difficulty:
     # Wahl der Aufgaben
     # Ab 3 freigeschalteten Aufgaben kann zwischen zufälligen Aufgaben und
     # einem Wunschthema entschieden werden
+    # Mögliche Eingabefehler durch try-except abgefangen
 
     def chooseExercise(self):
         print(self.list_subjects)
@@ -227,9 +228,18 @@ class Difficulty:
                     elif choice == 1:
                         self.subtraction(self.list_subjects[1][4] + 1)
         else:
-            choice = input('Bitte treffe eine Wahl:\n'
-                           '1 zufällige Aufgaben\n'
-                           '2 Thema wählen\n')
+            correct_input = False
+            choice = 1
+            while not correct_input:
+                try:
+                    choice = int(input('Bitte treffe eine Wahl:\n'
+                                       '1 zufällige Aufgaben\n'
+                                       '2 Thema wählen\n'))
+                except ValueError:
+                    print('Falsche eingabe, bitte neu eingeben als ganze Zahl!')
+                    correct_input = False
+                    continue
+                correct_input = True
             if choice == '1':
                 print('Zufall')
                 for x in range(0, 7):
@@ -268,7 +278,17 @@ class Difficulty:
                 print('Bitte triff eine Themenauswahl:')
                 for x in range(0, len(self.list_subjects) - 1):
                     print(f'{x} {self.topic_names[x]}')
-                choice = int(input())
+                correct_input = False
+                while not correct_input:
+                    try:
+                        choice = int(input('Bitte treffe eine Wahl:\n'
+                                           '1 zufällige Aufgaben\n'
+                                           '2 Thema wählen\n'))
+                    except ValueError:
+                        print('Falsche eingabe, bitte neu eingeben als ganze Zahl!')
+                        correct_input = False
+                        continue
+                    correct_input = True
                 for x in range(0, 7):
                     if choice == 0:
                         self.addition(self.list_subjects[0][4])
