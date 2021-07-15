@@ -85,11 +85,12 @@ class Database:
         ExSheetNum int NOT NULL,
         CntExercise int NOT NULL,
         Exercise String NOT NULL,
-        UserEntry String NOT NULL,
-        CorrectAnswer boolean NOT NULL,
-        SubjectArea int,
-        Topic int,
-        Niveau,
+        Result String NOT NULL,
+        UserEntry String Default 'no entry',
+        CorrectAnswer boolean Default True,
+        SubjectArea int NOT NULL,
+        Topic int NOT NULL,
+        Niveau int NOT NULL,
         FOREIGN KEY (Username, ExSheetNum)
             REFERENCES exerciseSheets (Username, ExSheetNum),
         FOREIGN KEY (SubjectArea, Topic, Niveau)
@@ -192,15 +193,15 @@ class Database:
     # Erstellt die Einträge der Aufgaben in der Datenbank
     # Keine Prüfung auf enthaltene Daten
 
-    def newExercise(self, ex_sheet_num, cnt_exercise, exercise, entry, correct):
+    def newExercise(self, ex_sheet_num, cnt_exercise, exercise, result, subject_area, topic, niveau):
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
 
         sql_instruction = f'''
-            INSERT INTO exercises (Username, ExSheetNum, CntExercise, Exercise, UserEntry, CorrectAnswer,
-            SubjectArea, Topic, Niveau)
-            VALUES('{self.user_name}', '{ex_sheet_num}', '{cnt_exercise}', '{exercise}', '{entry}', '{correct}', '1', 
-            '1', '1') '''
+            INSERT INTO exercises (Username, ExSheetNum, CntExercise, Exercise, Result,
+                SubjectArea, Topic, Niveau)
+            VALUES('{self.user_name}', '{ex_sheet_num}', '{cnt_exercise}', '{exercise}', '{result}', '{subject_area}',
+             '{topic}', '{niveau}') '''
 
         cursor.execute(sql_instruction)
 
