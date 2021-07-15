@@ -1,5 +1,5 @@
-import random
-from datetime import date
+# import random
+# from datetime import date
 from database import Database
 from difficulty import Difficulty
 
@@ -98,17 +98,18 @@ def read_exercises(n):
     return num_sheet
 
 
-def test_difficulty():
-    dif = Difficulty()
-    for x in range(0, 5):
-        y = x + 1
-        print('Durchlauf: ', y)
-        dif.addition(y)
-        dif.subtraction(y)
-        dif.multiplication(y)
-        dif.division(y)
-        dif.exponents(y)
-        dif.root(y)
+# def test_difficulty():
+#     dif = Difficulty()
+#     for x in range(0, 5):
+#         y = x + 1
+#         print('Durchlauf: ', y)
+#         dif.addition(y)
+#         dif.subtraction(y)
+#         dif.multiplication(y)
+#         dif.division(y)
+#         dif.exponents(y)
+#         dif.root(y)
+#         dif.chainFunctions(y)
 
 
 # Programmstart "main"
@@ -117,62 +118,78 @@ def test_difficulty():
 # Ergebnis wird berechnet und Anzahl richtiger ausgegeben
 # Problemlösung: random.choice(operator) immer selbes Ergebnis
 #   source: https://stackoverflow.com/questions/10181932/random-choice-always-same
+# Ändern db.newExercise
 
 print('Programm Start\n')
 
-test_difficulty()
+# test_difficulty()
 
 db = Database()
 name = player_login(db)
+list_subjects = db.actualNiveau()
+print(len(list_subjects))
+dif = Difficulty(db, list_subjects)
+dif.chooseExercises()
+dif.answerExercises()
+# print('Test actual difficulty')
+# # db.changeDifficulty(1, 1, 3)
+# list_subjects = db.actualNiveau(name)
+# print(len(list_subjects))
+# print(list_subjects)
+# print('Test ende')
 
-num1 = 0
-operator = ['+', '-', '*', '/']
-ranOperator = random.Random(500)
-num2 = 0
-result = 0
-entry = 0
-cntCorrect = 0
-cntExercises = 0
+# Speichern der Aufgaben in die Datenbank
+# Durch Auswahl der Aufgaben in Difficulty,
+# Alles unterhalt aktuell nicht mehr benötigt
 
-# Variablen für die Datenspeicherung auf der Text.txt
-day = date.today()
-correct = False
-correctAnswersAverage = 0
-exercises = ''
-
-exerciseSheet = read_exercises(name)
-print(exerciseSheet)
-exerciseSheet = db.newExerciseSheet(name, day)
-
-for i in range(0, 3):
-    num1 = random.randint(0, 10)
-    ranOperator = random.choice(operator)
-    num2 = random.randint(0, 10)
-    try:
-        result = float(calculate(num1, ranOperator, num2))
-    except TypeError:
-        result = None
-    print(f'{num1} {ranOperator} {num2} = ')
-    entry = player_entry()
-    if result != entry:
-        print(f'Falsches Ergebnis, richtig wäre: {result}')
-        correct = False
-    else:
-        cntCorrect += 1
-        correct = True
-    cntExercises += 1
-    t = f'{name};{exerciseSheet};{cntExercises};{day};{num1};{ranOperator};{num2};{entry};{result};{correct}\n'
-    exercise = f'{num1} {ranOperator} {num2} = {result}'
-    db.newExercise(name, exerciseSheet, cntExercises, exercise, entry, correct)
-    exercises += t
-
-print(f'{name} hat {cntCorrect} von {cntExercises} richtig beantwortet!\n')
-correctAnswersAverage = int(cntCorrect / cntExercises * 100)
-t = f'{name};{exerciseSheet};{cntExercises};{day};{cntCorrect};{correctAnswersAverage}'
-exercises += t
-
-values = [cntCorrect, correctAnswersAverage]
-db.updateExerciseSheet(name, exerciseSheet, values)
-safe_exercises(exercises)
+# num1 = 0
+# operator = ['+', '-', '*', '/']
+# ranOperator = random.Random(500)
+# num2 = 0
+# result = 0
+# entry = 0
+# cntCorrect = 0
+# cntExercises = 0
+#
+# # Variablen für die Datenspeicherung auf der Text.txt
+# day = date.today()
+# correct = False
+# correctAnswersAverage = 0
+# exercises = ''
+#
+# # exerciseSheet = read_exercises(name)
+# # print(exerciseSheet)
+# exerciseSheet = db.newExerciseSheet(day)
+#
+# for i in range(0, 3):
+#     num1 = random.randint(0, 10)
+#     ranOperator = random.choice(operator)
+#     num2 = random.randint(0, 10)
+#     try:
+#         result = float(calculate(num1, ranOperator, num2))
+#     except TypeError:
+#         result = None
+#     print(f'{num1} {ranOperator} {num2} = ')
+#     entry = player_entry()
+#     if result != entry:
+#         print(f'Falsches Ergebnis, richtig wäre: {result}')
+#         correct = False
+#     else:
+#         cntCorrect += 1
+#         correct = True
+#     cntExercises += 1
+#     t = f'{name};{exerciseSheet};{cntExercises};{day};{num1};{ranOperator};{num2};{entry};{result};{correct}\n'
+#     exercise = f'{num1} {ranOperator} {num2} = {result}'
+#     db.newExercise(exerciseSheet, cntExercises, exercise, entry, correct)
+#     exercises += t
+#
+# print(f'{name} hat {cntCorrect} von {cntExercises} richtig beantwortet!\n')
+# correctAnswersAverage = int(cntCorrect / cntExercises * 100)
+# t = f'{name};{exerciseSheet};{cntExercises};{day};{cntCorrect};{correctAnswersAverage}'
+# exercises += t
+#
+# values = [cntCorrect, correctAnswersAverage]
+# db.updateExerciseSheet(exerciseSheet, values)
+# # safe_exercises(exercises)
 
 print('\nProgrammende')
