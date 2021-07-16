@@ -126,11 +126,20 @@ print('Programm Start\n')
 
 db = Database()
 name = player_login(db)
-list_subjects = db.actualNiveau()
-print(len(list_subjects))
-dif = Difficulty(db, list_subjects)
-dif.chooseExercises()
-dif.answerExercises()
+
+playing = True
+while playing:
+    list_subjects = db.actualNiveau()
+    # print(len(list_subjects))
+    dif = Difficulty(db, list_subjects)
+    dif.chooseExercises()
+    dif.answerExercises()
+    choose = input('Möchtest du noch ein Aufgabenblatt lösen? Ja/Nein\n')
+    if choose.lower() == 'ja':
+        print('Viel Spaß!')
+    else:
+        playing = False
+        print('Schade, bis zum nächsten Mal.')
 # print('Test actual difficulty')
 # # db.changeDifficulty(1, 1, 3)
 # list_subjects = db.actualNiveau(name)

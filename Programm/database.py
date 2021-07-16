@@ -177,7 +177,7 @@ class Database:
             cursor.execute(sql_instruction)
             content = cursor.fetchall()
             self.exercise_sheet_num = content[0][0] + 1
-            print(self.exercise_sheet_num)
+            # print(self.exercise_sheet_num)
 
         sql_instruction = f'''
             INSERT INTO exerciseSheets (UserName, ExSheetNum, Day)
@@ -341,7 +341,7 @@ class Database:
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
         for x in range(0, len(self.list_subjects)):
-            print(str(self.list_subjects[x][4] + 1))
+            # print(str(self.list_subjects[x][4] + 1))
             sql_instruction = f'''
                         SELECT * FROM exercises
                         WHERE Username = '{self.user_name}'
@@ -352,23 +352,16 @@ class Database:
             cursor.execute(sql_instruction)
             connection.commit()
             exercises = cursor.fetchall()
-            print(exercises)
+            # print(exercises)
             correct_answers = 0
             for y in exercises:
                 if y[7] == 1:
                     correct_answers += 1
             average_correct = int(correct_answers / len(exercises) * 100)
-            print(f'Durchschnitt: {average_correct}')
-            if len(exercises) <= 5 and average_correct <= 80:
-                sql_instruction = f'''
-                            Update subjects
-                            SET NumberExercises = '{len(exercises)}',
-                                AverageCorrect = '{average_correct}'
-                            WHERE SID = '{self.list_subjects[x][0]}'
-                            '''
-            else:
+            # print(f'Durchschnitt: {average_correct}')
+            if len(exercises) >= 5 and average_correct >= 80:
                 print(f'Glückwunsch, du hast {len(exercises)} Aufgaben durchschnittlich'
-                      f'zu {average_correct} prozent richtig.\n'
+                      f' zu {average_correct} prozent richtig.\n'
                       f'Du bist im Thema {self.list_subjects[x][2]} {self.list_subjects[x][3]} '
                       f'nun auf Niveau {self.list_subjects[x][4]+1} aufgestiegen.')
                 sql_instruction = f'''
@@ -378,10 +371,19 @@ class Database:
                                 AverageCorrect = 100
                             WHERE SID = '{self.list_subjects[x][0]}'
                             '''
+            else:
+                sql_instruction = f'''
+                            Update subjects
+                            SET NumberExercises = '{len(exercises)}',
+                                AverageCorrect = '{average_correct}'
+                            WHERE SID = '{self.list_subjects[x][0]}'
+                            '''
             cursor.execute(sql_instruction)
             connection.commit()
 
-        if self.list_subjects[len(self.list_subjects)-1][4] == 3:
+        # print(self.list_subjects)
+        # print(self.list_subjects[len(self.list_subjects)-1][4])
+        if int(self.list_subjects[len(self.list_subjects)-1][4]) >= 3:
             print('Glückwunsch, neues Thema freigeschaltet!')
             if self.list_subjects[len(self.list_subjects)-1][2] == 1:
                 self.changeDifficulty(2, 1, 1)
