@@ -341,14 +341,16 @@ class Database:
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
         for x in range(0, len(self.list_subjects)):
+            print(str(self.list_subjects[x][4] + 1))
             sql_instruction = f'''
                         SELECT * FROM exercises
                         WHERE Username = '{self.user_name}'
                             AND SubjectArea = '{self.list_subjects[x][2]}'
                             AND Topic = '{self.list_subjects[x][3]}'
-                            AND Niveau = '{self.list_subjects[x][4]+1}'
+                            AND Niveau = '{(self.list_subjects[x][4]) + 1}'
                         '''
             cursor.execute(sql_instruction)
+            connection.commit()
             exercises = cursor.fetchall()
             print(exercises)
             correct_answers = 0
@@ -377,6 +379,7 @@ class Database:
                             WHERE SID = '{self.list_subjects[x][0]}'
                             '''
             cursor.execute(sql_instruction)
+            connection.commit()
 
         if self.list_subjects[len(self.list_subjects)-1][4] == 3:
             print('Glückwunsch, neues Thema freigeschaltet!')
