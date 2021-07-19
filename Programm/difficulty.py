@@ -42,8 +42,6 @@ class Difficulty:
         num2 = random.randint(self.lower_limit, self.upper_limit)
         result = num1 + num2
         exercise = f'{num1} + {num2} = '
-        # print(exercise)
-        # print(result)
         self.db.newExercise(self.exerciseSheet, self.cnt_exercise, exercise,
                             result, self.subject_area, self.topic, niveau)
 
@@ -64,8 +62,6 @@ class Difficulty:
         num2 = random.randint(self.lower_limit, self.upper_limit)
         result = num1 - num2
         exercise = f'{num1} - {num2} = '
-        # print(exercise)
-        # print(result)
         self.db.newExercise(self.exerciseSheet, self.cnt_exercise, exercise,
                             result, self.subject_area, self.topic, niveau)
 
@@ -91,8 +87,6 @@ class Difficulty:
         num2 = random.randint(self.lower_limit, self.upper_limit_two)
         result = num1 * num2
         exercise = f'{num1} * {num2} = '
-        # print(exercise)
-        # print(result)
         self.db.newExercise(self.exerciseSheet, self.cnt_exercise, exercise,
                             result, self.subject_area, self.topic, niveau)
 
@@ -117,8 +111,6 @@ class Difficulty:
                 num2 = random.randint(self.lower_limit, self.upper_limit)
         result = int(num1 / num2)
         exercise = f'{num1} / {num2} = '
-        # print(exercise)
-        # print(result)
         self.db.newExercise(self.exerciseSheet, self.cnt_exercise, exercise,
                             result, self.subject_area, self.topic, niveau)
 
@@ -144,8 +136,6 @@ class Difficulty:
         num2 = random.randint(self.lower_limit, self.upper_limit)
         result = num1 ** num2
         exercise = f'{num1} ^ {num2} = '
-        # print(exercise)
-        # print(result)
         self.db.newExercise(self.exerciseSheet, self.cnt_exercise, exercise,
                             result, self.subject_area, self.topic, niveau)
 
@@ -168,8 +158,6 @@ class Difficulty:
         num1 = random.randint(self.lower_limit, self.upper_limit)
         result = num1 ** num2
         exercise = f'{result} ^ 1/{num2} = '
-        # print(exercise)
-        # print(num1)
         self.db.newExercise(self.exerciseSheet, self.cnt_exercise, exercise,
                             result, self.subject_area, self.topic, niveau)
 
@@ -221,8 +209,6 @@ class Difficulty:
             result = result / num5
             exercise = f'({num1} + {num2} - {num3}) * {num4} / {num5} = '
 
-        # print(exercise)
-        # print(result)
         self.db.newExercise(self.exerciseSheet, self.cnt_exercise, exercise,
                             result, self.subject_area, self.topic, niveau)
 
@@ -235,7 +221,6 @@ class Difficulty:
 
     def chooseExercises(self):
         self.exerciseSheet = self.db.newExerciseSheet(self.day)
-        # print(self.list_subjects)
         if len(self.list_subjects) < 3:
             if len(self.list_subjects) == 1:
                 for x in range(0, 7):
@@ -355,11 +340,9 @@ class Difficulty:
                         self.exponents(self.list_subjects[5][4] + 1)
                     elif choice == 6:
                         self.root(self.list_subjects[6][4] + 1)
-        # db.updateExerciseSheet(exerciseSheet, values)
 
     def answerExercises(self):
         exercises = self.db.getExercises()
-        # print(exercises)
         answers = list()
         solution_answers = list()
         cnt_correct_answers = 0
@@ -370,10 +353,6 @@ class Difficulty:
             else:
                 cnt_correct_answers += 1
                 solution_answers.append(True)
-        # print(exercises)
-        # print(answers)
-        # print(solution_answers)
-        # print(cnt_correct_answers)
 
         self.db.updateExercises(answers, solution_answers)
 

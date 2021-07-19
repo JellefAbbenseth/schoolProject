@@ -120,8 +120,6 @@ class Database:
         cursor.execute(sql_instruction)
 
         content = cursor.fetchall()
-        # content == 2 Dimensionalem Array
-        # print(content)
         for x in content:
             if x[0] == name:
                 print(x[0])
@@ -177,7 +175,6 @@ class Database:
             cursor.execute(sql_instruction)
             content = cursor.fetchall()
             self.exercise_sheet_num = content[0][0] + 1
-            # print(self.exercise_sheet_num)
 
         sql_instruction = f'''
             INSERT INTO exerciseSheets (UserName, ExSheetNum, Day)
@@ -341,7 +338,6 @@ class Database:
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
         for x in range(0, len(self.list_subjects)):
-            # print(str(self.list_subjects[x][4] + 1))
             sql_instruction = f'''
                         SELECT * FROM exercises
                         WHERE Username = '{self.user_name}'
@@ -352,13 +348,11 @@ class Database:
             cursor.execute(sql_instruction)
             connection.commit()
             exercises = cursor.fetchall()
-            # print(exercises)
             correct_answers = 0
             for y in exercises:
                 if y[7] == 1:
                     correct_answers += 1
             average_correct = int(correct_answers / len(exercises) * 100)
-            # print(f'Durchschnitt: {average_correct}')
             if len(exercises) >= 5 and average_correct >= 80:
                 print(f'Glückwunsch, du hast {len(exercises)} Aufgaben durchschnittlich'
                       f' zu {average_correct} prozent richtig.\n'
@@ -381,8 +375,6 @@ class Database:
             cursor.execute(sql_instruction)
             connection.commit()
 
-        # print(self.list_subjects)
-        # print(self.list_subjects[len(self.list_subjects)-1][4])
         if int(self.list_subjects[len(self.list_subjects)-1][4]) >= 3:
             print('Glückwunsch, neues Thema freigeschaltet!')
             if self.list_subjects[len(self.list_subjects)-1][2] == 1:
