@@ -4,7 +4,7 @@ body {
 }
 
 div#base {
-    background-color: aliceblue;
+    background-color: whitesmoke;
     z-index: 1;
     margin: 0 auto;
     max-width: 1200px;
@@ -15,14 +15,30 @@ h1 {
     margin: 0em;
 }
 
+h2 {
+    width: 100%;
+}
+
 header {
     padding: 10px;
+}
+
+button#loButton {
+    background-color: seagreen;
+    border-radius: 5px;
 }
 
 main {
     padding: 10px;
 }
 
-div#log {
-    background-color: forestgreen;
+div#user {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+div#user_item {
+    width: 50%;
 }
