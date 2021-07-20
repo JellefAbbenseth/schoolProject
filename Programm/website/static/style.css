@@ -1,0 +1,28 @@
+body {
+    background-color: black;
+    z-index: 0;
+}
+
+div#base {
+    background-color: aliceblue;
+    z-index: 1;
+    margin: 0 auto;
+    max-width: 1200px;
+    width: auto;
+}
+
+h1 {
+    margin: 0em;
+}
+
+header {
+    padding: 10px;
+}
+
+main {
+    padding: 10px;
+}
+
+div#log {
+    background-color: forestgreen;
+}

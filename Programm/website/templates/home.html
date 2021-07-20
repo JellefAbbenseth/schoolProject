@@ -2,5 +2,31 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<p>Home</p>
+    <header>
+        <h1>Lernprogramm</h1>
+        <div id="log">
+            <form method="POST">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>        
+    </header>
+    <main>
+        <div id="user">
+            <h2>Anwender</h2>
+            <div id="user_item">
+                <p>Form Userdata</p>
+            </div>
+            <div id="user_item">
+                <p>Form User-statistics</p>
+            </div>
+        </div>
+        <div id="theme">
+            <h2>Themen</h2>
+            <p>1. Thema ...</p>
+        </div>
+        <div id="exercises">
+            <h2>Aufgaben</h2>
+            <p>1. Aufgabenblatt ...</p>
+        </div>
+    </main>
 {% endblock %}
