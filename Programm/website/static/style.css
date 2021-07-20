@@ -4,11 +4,13 @@ body {
 }
 
 div#base {
-    background-color: whitesmoke;
+    position: relative;
+    background-color: snow;
     z-index: 1;
     margin: 0 auto;
     max-width: 1200px;
     width: auto;
+    height: 960px;
 }
 
 h1 {
@@ -23,9 +25,12 @@ header {
     padding: 10px;
 }
 
+button {
+    border-radius: 5px;
+}
+
 button#loButton {
     background-color: seagreen;
-    border-radius: 5px;
 }
 
 main {
@@ -41,4 +46,47 @@ div#user {
 
 div#user_item {
     width: 50%;
+}
+
+/*
+    login.html spezifische styles
+*/
+div#login_frame {
+    position: absolute;
+    background-color: snow;
+    border: 5px;
+    border-style: solid;
+    border-color: black;
+    z-index: 2;
+    left: -120px;
+    top: -50px;
+    margin-left: 50%;
+    margin-top: 50%;
+    width: 240px;
+    height: 100px;
+    padding: 10px;
+}
+
+input#input_user_name {
+    width: 75px;
+    margin: 5px;
+}
+
+/*
+    registry.html spezifische styles
+*/
+div#registry_frame {
+    position: absolute;
+    background-color: snow;
+    border: 5px;
+    border-style: solid;
+    border-color: black;
+    z-index: 2;
+    left: -120px;
+    top: -50px;
+    margin-left: 50%;
+    margin-top: 50%;
+    width: 240px;
+    height: 100px;
+    padding: 10px;
 }
