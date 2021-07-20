@@ -1,5 +1,7 @@
-from database import Database
-from difficulty import Difficulty
+# from database import Database
+# from difficulty import Difficulty
+from website import create_app
+import webbrowser
 
 
 # Datenbank erstellen
@@ -37,23 +39,34 @@ def player_login(database):
 # Erstellen oder Aufrufen der Datenbank mit Anmeldung
 # Stellen von Aufgaben mit Möglichkeit weitere Aufgaben zu erstellen und bearbeiten
 # Beenden des Programms, wenn der User es möchte, nachdem alle Aufgaben beantwortet wurden
+# Öffnen einer Webseite (vorläufig auskommentieren des restlichen Programms!)
 
 print('Programm Start\n')
 
-db = Database()
-name = player_login(db)
+# Webseite starten
+app = create_app()
 
-playing = True
-while playing:
-    list_subjects = db.actualNiveau()
-    dif = Difficulty(db, list_subjects)
-    dif.chooseExercises()
-    dif.answerExercises()
-    choose = input('Möchtest du noch ein Aufgabenblatt lösen? Ja/Nein\n')
-    if choose.lower() == 'ja':
-        print('Viel Spaß!')
-    else:
-        playing = False
-        print('Schade, bis zum nächsten Mal.')
+if __name__ == '__main__':
+    port = 5000
+    url = 'http://127.0.0.1:{0}'.format(port)
+    webbrowser.open_new_tab(url)
+
+    app.run(port=port, debug=False)
+
+# db = Database()
+# name = player_login(db)
+#
+# playing = True
+# while playing:
+#     list_subjects = db.actualNiveau()
+#     dif = Difficulty(db, list_subjects)
+#     dif.chooseExercises()
+#     dif.answerExercises()
+#     choose = input('Möchtest du noch ein Aufgabenblatt lösen? Ja/Nein\n')
+#     if choose.lower() == 'ja':
+#         print('Viel Spaß!')
+#     else:
+#         playing = False
+#         print('Schade, bis zum nächsten Mal.')
 
 print('\nProgrammende')

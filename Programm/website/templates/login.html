@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <div id="login_frame">
+        <h2>Login</h2>
+        <form method="POST">
+            <div class="form-group_login">
+                <label for="user_name">Benutzername: </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="input_user_name"
+                    name="input_user_name"
+                    placeholder="DoJo"
+                />
+                <button id="login_button" type="submit" value="login" name="login_button">Login</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
