@@ -4,11 +4,12 @@ views = Blueprint('views', __name__)
 
 
 # Ordner templates absolutes muss!
+# Lösung output: https://stackoverflow.com/questions/59698464/changing-value-of-flask-variable-in-html
 
 @views.route('/', methods=['GET', 'POST'])
 def home():
+    text = ''
     if request.method == 'POST':
         text = request.form.get('input')
-        request.form.update(input=text)
 
-    return render_template('home.html')
+    return render_template('home.html', output=text)
