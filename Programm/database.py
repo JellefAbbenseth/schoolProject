@@ -399,3 +399,7 @@ class Database:
 
         connection.commit()
         connection.close()
+
+    @staticmethod
+    def getUserInformation():
+        return 'Test'
