@@ -1,4 +1,15 @@
 import sqlite3
+from Programm.website import db
+from flask_login import UserMixin
+
+
+# Datenbankanbindung für SQLAlchemy
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    UserName = db.Column(db.String(30), unique=True)
+    FirstName = db.Column(db.String(30))
+    LastName = db.Column(db.String(30))
 
 
 # Database ist eine Klasse, die den Zugriff auf die Datenbank SQLite 3 ermöglicht
@@ -22,13 +33,14 @@ class Database:
         # Erstellen der Datenbanktabelle name
         # enthält UserName (Key), FirstName, LastName
 
-        sql_instruction = '''
-        CREATE TABLE IF NOT EXISTS user (
-        UserName varchar (30) NOT NULL PRIMARY KEY,
-        FirstName varchar (30) NOT NULL,
-        LastName varchar (30) NOT NULL);
-        '''
-        cursor.execute(sql_instruction)
+        # sql_instruction = '''
+        # CREATE TABLE IF NOT EXISTS User (
+        # ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        # UserName varchar (30) NOT NULL,
+        # FirstName varchar (30) NOT NULL,
+        # LastName varchar (30) NOT NULL);
+        # '''
+        # cursor.execute(sql_instruction)
 
         # Erstellen der Datenbanktabelle Aufgabenblätter
         # enthält:
@@ -357,10 +369,10 @@ class Database:
                 print(f'Glückwunsch, du hast {len(exercises)} Aufgaben durchschnittlich'
                       f' zu {average_correct} prozent richtig.\n'
                       f'Du bist im Thema {self.list_subjects[x][2]} {self.list_subjects[x][3]} '
-                      f'nun auf Niveau {self.list_subjects[x][4]+1} aufgestiegen.')
+                      f'nun auf Niveau {self.list_subjects[x][4] + 1} aufgestiegen.')
                 sql_instruction = f'''
                             Update subjects
-                            SET Niveau = '{self.list_subjects[x][4]+1}',
+                            SET Niveau = '{self.list_subjects[x][4] + 1}',
                                 NumberExercises = 0,
                                 AverageCorrect = 100
                             WHERE SID = '{self.list_subjects[x][0]}'
@@ -375,23 +387,23 @@ class Database:
             cursor.execute(sql_instruction)
             connection.commit()
 
-        if int(self.list_subjects[len(self.list_subjects)-1][4]) >= 3:
+        if int(self.list_subjects[len(self.list_subjects) - 1][4]) >= 3:
             print('Glückwunsch, neues Thema freigeschaltet!')
-            if self.list_subjects[len(self.list_subjects)-1][2] == 1:
+            if self.list_subjects[len(self.list_subjects) - 1][2] == 1:
                 self.changeDifficulty(2, 1, 1)
-            elif self.list_subjects[len(self.list_subjects)-1][2] == 2:
+            elif self.list_subjects[len(self.list_subjects) - 1][2] == 2:
                 self.changeDifficulty(3, 1, 1)
-            elif self.list_subjects[len(self.list_subjects)-1][2] == 3 \
-                    and self.list_subjects[len(self.list_subjects)-1][3] == 1:
+            elif self.list_subjects[len(self.list_subjects) - 1][2] == 3 \
+                    and self.list_subjects[len(self.list_subjects) - 1][3] == 1:
                 self.changeDifficulty(3, 2, 1)
-            elif self.list_subjects[len(self.list_subjects)-1][2] == 3 \
-                    and self.list_subjects[len(self.list_subjects)-1][3] == 2:
+            elif self.list_subjects[len(self.list_subjects) - 1][2] == 3 \
+                    and self.list_subjects[len(self.list_subjects) - 1][3] == 2:
                 self.changeDifficulty(3, 3, 1)
-            elif self.list_subjects[len(self.list_subjects)-1][2] == 3 \
-                    and self.list_subjects[len(self.list_subjects)-1][3] == 3:
+            elif self.list_subjects[len(self.list_subjects) - 1][2] == 3 \
+                    and self.list_subjects[len(self.list_subjects) - 1][3] == 3:
                 self.changeDifficulty(4, 1, 1)
-            elif self.list_subjects[len(self.list_subjects)-1][2] == 4 \
-                    and self.list_subjects[len(self.list_subjects)-1][3] == 1:
+            elif self.list_subjects[len(self.list_subjects) - 1][2] == 4 \
+                    and self.list_subjects[len(self.list_subjects) - 1][3] == 1:
                 self.changeDifficulty(4, 2, 1)
             else:
                 print('Glückwunsch, alle möglichen Themen freigeschaltet.\n'
