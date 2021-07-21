@@ -10,6 +10,8 @@ def home():
             return render_template('login.html')
         if request.form.get('exercise_button'):
             return render_template('exercise_sheet.html')
+        if request.form.get('hand-in_button'):
+            return render_template('exercise_sheet.html')
 
     user_name = 'DoJo'
     first_name = 'John'

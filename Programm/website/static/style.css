@@ -48,6 +48,10 @@ div#user_item {
     width: 50%;
 }
 
+footer {
+    padding: 10px;
+}
+
 /*
     login.html spezifische styles
 */
