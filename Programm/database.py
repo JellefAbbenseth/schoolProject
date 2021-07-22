@@ -4,13 +4,15 @@ from flask_login import UserMixin
 
 
 # Datenbankanbindung für SQLAlchemy
-# Ersetzt die user tabelle von class Database
+# Ermöglicht SQLAlchemy die User Tabelle zu beschreiben
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     UserName = db.Column(db.String(30), unique=True)
     FirstName = db.Column(db.String(30))
     LastName = db.Column(db.String(30))
+    TotalExercises = db.Column(db.Integer, default=0)
+    TotalCorrectExercises = db.Column(db.Integer, default=0)
 
 
 # Database ist eine Klasse, die den Zugriff auf die Datenbank SQLite 3 ermöglicht
@@ -36,14 +38,16 @@ class Database:
         # Erstellen der Datenbanktabelle name
         # enthält UserName (Key), FirstName, LastName
 
-        # sql_instruction = '''
-        # CREATE TABLE IF NOT EXISTS User (
-        # ID INTEGER PRIMARY KEY AUTOINCREMENT,
-        # UserName STRING (30) NOT NULL UNIQUE,
-        # FirstName STRING (30) NOT NULL,
-        # LastName STRING (30) NOT NULL);
-        # '''
-        # cursor.execute(sql_instruction)
+        sql_instruction = '''
+        CREATE TABLE IF NOT EXISTS User (
+        ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        UserName STRING (30) NOT NULL UNIQUE,
+        FirstName STRING (30) NOT NULL,
+        LastName STRING (30) NOT NULL,
+        TotalExercises INTEGER Default 0,
+        TotalCorrectExercises INTEGER DEFAULT 0);
+        '''
+        cursor.execute(sql_instruction)
 
         # Erstellen der Datenbanktabelle Aufgabenblätter
         # enthält:
@@ -131,6 +135,28 @@ class Database:
         cursor.execute(sql_instruction)
 
         content = cursor.fetchall()
+        self.user_name = content[0][1]
+        connection.close()
+        return content
+
+    def userSubjectInformation(self):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+        sql_instruction = f'''
+        SELECT * FROM subjects WHERE Username = '{self.user_name}'
+        '''
+        cursor.execute(sql_instruction)
+
+        content = cursor.fetchall()
+
+        if len(content) < 1:
+            sql_instruction = f'''
+            INSERT INTO subjects (Username, SubjectArea, Topic, Niveau)
+            VALUES ('{self.user_name}', '1', '1', '1')
+            '''
+            cursor.execute(sql_instruction)
+            self.new_user = True
+
         connection.close()
         return content
 

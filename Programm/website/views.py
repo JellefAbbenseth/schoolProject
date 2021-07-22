@@ -28,11 +28,15 @@ def home():
     user_name = user_information[0][1]
     first_name = user_information[0][2]
     last_name = user_information[0][3]
-    exercises = 10
-    average = 90
-    niveau = 3
-    number_exercises = 7
-    average_exercises = 70
+    exercises = user_information[0][4]
+    if user_information[0][5] != 0:
+        average = int(user_information[0][4]/user_information[0][5]*100)
+    else:
+        average = 100
+    user_information = database.userSubjectInformation()
+    niveau = user_information[0][4]
+    number_exercises = user_information[0][5]
+    average_exercises = user_information[0][6]
 
     return render_template('home.html', user=current_user, user_name=user_name, first_name=first_name,
                            last_name=last_name, exercises=exercises, average=average,

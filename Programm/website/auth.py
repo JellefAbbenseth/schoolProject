@@ -42,15 +42,19 @@ def registry():
         first_name = request.form.get('input_first_name')
         last_name = request.form.get('input_last_name')
 
-        user = User.query.filter_by(UserName=user_name).first()
-        # print(user)
-        if user and user.UserName == user_name:
-            print('Username already exists')
-        else:
-            # print(user_name)
-            new_user = User(UserName=user_name, FirstName=first_name, LastName=last_name)
-            db.session.add(new_user)
-            db.session.commit()
-            return redirect(url_for('auth.login'))
+        try:
+            user = User.query.filter_by(UserName=user_name).first()
+            print(user)
+            if user and user.UserName == user_name:
+                print('Username already exists')
+            else:
+                print(user_name)
+                new_user = User(UserName=user_name, FirstName=first_name, LastName=last_name)
+                db.session.add(new_user)
+                db.session.commit()
+                return redirect(url_for('auth.login'))
+        except sqlalchemy.exc.OperationalError:
+            print(user_name)
+            return render_template('registry.html')
 
     return render_template('registry.html')
