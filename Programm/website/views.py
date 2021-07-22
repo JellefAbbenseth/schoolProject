@@ -1,7 +1,9 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, g
 from flask_login import login_required, current_user
+from Programm.database import Database
 
 views = Blueprint('views', __name__)
+database = Database()
 
 
 @views.route('/', methods=['GET', 'POST'])
@@ -16,9 +18,16 @@ def home():
         if request.form.get('hand-in_button'):
             return render_template('exercise_sheet.html')
 
-    user_name = 'Test'
-    first_name = 'Test'
-    last_name = 'Kurz'
+    # get user id: https://stackoverflow.com/questions/53094104/get-the-user-id-in-flask
+
+    g.user = current_user.get_id()
+    # print(g.user)
+    user_information = database.userInformation(g.user)
+    # print(user_information)
+
+    user_name = user_information[0][1]
+    first_name = user_information[0][2]
+    last_name = user_information[0][3]
     exercises = 10
     average = 90
     niveau = 3

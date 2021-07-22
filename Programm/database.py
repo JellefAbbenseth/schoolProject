@@ -4,6 +4,7 @@ from flask_login import UserMixin
 
 
 # Datenbankanbindung für SQLAlchemy
+# Ersetzt die user tabelle von class Database
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -21,8 +22,10 @@ class Database:
         self.new_user: bool = False
         self.list_subjects = list()
         self.exercises = list()
+        self.user_id = 1
         self.user_name = 'Test'
         self.exercise_sheet_num = 1
+        self.createTables()
 
     @staticmethod
     def createTables():
@@ -114,6 +117,22 @@ class Database:
         connection.commit()
         connection.close()
         print('Tabellen erstellt')
+
+    # Liest die Informationen aus der Datenbank aus und gibt sie dan die Webseite weiter
+
+    def userInformation(self, user_id):
+        self.user_id = user_id
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+        sql_instruction = f'''
+        SELECT * FROM User WHERE id = {self.user_id}
+        '''
+
+        cursor.execute(sql_instruction)
+
+        content = cursor.fetchall()
+        connection.close()
+        return content
 
     # selectUser ermöglicht das Suchen und Finden eines bestehenden Datensatzes
     # Weiterhin prüft es, ob bereits ein User mit dem übergebenen Wert besteht
