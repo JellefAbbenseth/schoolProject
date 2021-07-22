@@ -1,4 +1,4 @@
-# from os import path
+from os import path
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
@@ -22,7 +22,7 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
 
     from Programm.database import User
-    # create_database(app)
+    create_database(app)
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
@@ -35,7 +35,7 @@ def create_app():
     return app
 
 
-# def create_database(app):
-#     if not path.exists('../datenbank/' + DB_Name):
-#         db.create_all(app=app)
-#         print('Created Database!')
+def create_database(app):
+    if not path.exists('../datenbank/' + DB_Name):
+        db.create_all(app=app)
+        # print('Created Database!')

@@ -8,6 +8,7 @@ views = Blueprint('views', __name__)
 @login_required
 def home():
     if request.method == 'POST':
+        print('Hier: home')
         if request.form.get('logout_button'):
             return render_template('login.html')
         if request.form.get('exercise_button'):

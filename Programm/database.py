@@ -36,9 +36,9 @@ class Database:
         # sql_instruction = '''
         # CREATE TABLE IF NOT EXISTS User (
         # ID INTEGER PRIMARY KEY AUTOINCREMENT,
-        # UserName varchar (30) NOT NULL,
-        # FirstName varchar (30) NOT NULL,
-        # LastName varchar (30) NOT NULL);
+        # UserName STRING (30) NOT NULL UNIQUE,
+        # FirstName STRING (30) NOT NULL,
+        # LastName STRING (30) NOT NULL);
         # '''
         # cursor.execute(sql_instruction)
 
@@ -126,7 +126,7 @@ class Database:
         name_exist = False
 
         sql_instruction = '''
-        SELECT * FROM user
+        SELECT * FROM User
         '''
 
         cursor.execute(sql_instruction)
