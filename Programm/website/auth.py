@@ -15,12 +15,12 @@ def login():
         user = User.query.filter_by(UserName=UserName).first()
         print(f'Test: {user}')
         if user:
-            if User.UserName == UserName:
+            if str(User.UserName) == str(UserName):
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
-            else:
-                print('Else')
-                return redirect(url_for('registry.html'))
+        else:
+            print('Else')
+            return redirect(url_for('auth.registry'))
 
     return render_template('login.html', user=current_user)
 
@@ -30,3 +30,8 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
+
+
+@auth.route('/registry')
+def registry():
+    return render_template('registry.html', user=current_user)
