@@ -7,14 +7,14 @@
     </header>
     <main>
         <form method="POST">
-            {% for exercise in exercises %}
+            {% for key, value in exercises.items() %}
                 <li class="list-group-item">
-                    {{ exercise }}
+                    <pre>{{ value }}</pre>
                     <input
                         type="text"
                         class="form-control"
-                        id="input_result"
-                        name="input_result"
+                        id="selector-{{ key }}"
+                        name="selector-{{ key }}"
                         placeholder="0"
                     />
                 </li>

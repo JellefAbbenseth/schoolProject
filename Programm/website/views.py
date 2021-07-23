@@ -57,18 +57,18 @@ def exerciseSheet():
         if request.form.get('return_button'):
             return redirect(url_for('views.home'))
         if request.form.get('hand-in_button'):
-            text = request.form.getlist('input_result')
+            text = request.form.get('selector-1')
             print(text)
     print('Exercises')
 
     ex = database.getExercises()
     print(ex)
-    exercises = list()
+    exercises = dict()
     y = 0
     for x in ex:
         y += 1
         text = f'{y}. Aufgabe: {x[4]}'
-        exercises.append(text)
+        exercises[y] = text
         print(text)
 
     return render_template('exercise_sheet.html', user=current_user, exercises=exercises)
