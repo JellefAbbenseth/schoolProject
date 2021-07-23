@@ -47,6 +47,14 @@
             <form method="POST" action="/">
                 <button id="exButton" type="submit" value="exercise" name="exercise_button">Zufällige Aufgaben</button>
             </form>
+            {% for theme in themes %}
+                <li class="list-group-item">
+                    {{ theme }}
+                    <button type="button" class="open">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </li>
+            {% endfor %}
             <pre>1. Thema: Addition          Stufe: {{niveau}}            Aufgaben: {{number_exercises}}             Durchschnitt: {{average_exercises}}</pre>
             <p>Textfeld?!</p>
         </div>

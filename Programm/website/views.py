@@ -34,11 +34,12 @@ def home():
     else:
         average = 100
     user_information = database.userSubjectInformation()
-    niveau = user_information[0][4]
-    number_exercises = user_information[0][5]
-    average_exercises = user_information[0][6]
+
+    themes = list()
+    for x in user_information:
+        text = f'{x[0]}. Thema: \"Thema\"\tNiveau: {x[4]}\tAufgaben bearbeitet:'
+        text += f' {x[5]}\tDurchschnitt: {x[6]}'
+        themes.append(text)
 
     return render_template('home.html', user=current_user, user_name=user_name, first_name=first_name,
-                           last_name=last_name, exercises=exercises, average=average,
-                           niveau=niveau, number_exercises=number_exercises,
-                           average_exercises=average_exercises)
+                           last_name=last_name, exercises=exercises, average=average, themes=themes)
