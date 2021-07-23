@@ -7,16 +7,18 @@
     </header>
     <main>
         <form method="POST">
-            <div class="form-group_exercises">
-                <label for="exercises">1. Aufgabe {{exercises}}</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    id="input_result"
-                    name="input_result"
-                    placeholder="0"
-                />
-            </div>
+            {% for exercise in exercises %}
+                <li class="list-group-item">
+                    {{ exercise }}
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="input_result"
+                        name="input_result"
+                        placeholder="0"
+                    />
+                </li>
+            {% endfor %}
         </form>
     </main>
     <footer>

@@ -19,9 +19,12 @@ class Difficulty:
     upper_limit = 10
     upper_limit_two = 10
 
-    def __init__(self, db, list_subjects):
+    # __init__ ändert sich durch den Zugriff über views
+    # list_subjects wird später hinzugefügt
+
+    def __init__(self, db):
         self.db = db
-        self.list_subjects = list_subjects
+        self.list_subjects = list()
         self.exerciseSheet = 1
         self.day = date.today()
 
@@ -219,8 +222,9 @@ class Difficulty:
     # Eintrag neues Aufgabenblatt in Datenbank
     # Aufgabennummer hinzugefügt cnt_exercise
 
-    def chooseExercises(self):
+    def chooseExercises(self, list_subjects):
         self.exerciseSheet = self.db.newExerciseSheet(self.day)
+        self.list_subjects = list_subjects
         if len(self.list_subjects) < 3:
             if len(self.list_subjects) == 1:
                 for x in range(0, 7):
