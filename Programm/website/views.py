@@ -117,15 +117,21 @@ def chooseExercises(id):
     print('Thema:')
     print(id)
 
-    # ex = database.getExercises()
-    # print(ex)
+    num = database.unansweredExercises()
+    print(num)
+    if num == 0:
+        list_subjects = database.actualNiveau()
+        difficulty.chooseExercises(list_subjects, id)
+
+    ex = database.getExercises()
+    print(ex)
     exercises = dict()
-    # key = 0
-    # for x in ex:
-    #     key += 1
-    #     value = f'{key}. Aufgabe: {x[4]}'
-    #     exercises[key] = value
-    #     print(value)
+    key = 0
+    for x in ex:
+        key += 1
+        value = f'{key}. Aufgabe: {x[4]}'
+        exercises[key] = value
+        print(value)
 
     return render_template('exercise_sheet.html', user=current_user, exercises=exercises)
 
