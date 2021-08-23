@@ -38,7 +38,7 @@ def home():
     last_name = user_information[0][3]
     exercises = user_information[0][4]
     if user_information[0][5] != 0:
-        average = int(user_information[0][4] / user_information[0][5] * 100)
+        average = int(user_information[0][5] / user_information[0][4] * 100)
     else:
         average = 100
     user_information = database.userSubjectInformation()

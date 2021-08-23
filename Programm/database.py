@@ -126,6 +126,7 @@ class Database:
 
     def userInformation(self, user_id):
         self.user_id = user_id
+        self.updateUser()
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
         sql_instruction = f'''
@@ -306,6 +307,42 @@ class Database:
         connection.commit()
         connection.close()
         return self.exercises
+
+    # Überarbeiten der Benutzerdaten von User
+
+    def updateUser(self):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+
+        sql_instruction = f'''
+            SELECT * FROM exerciseSheets
+            WHERE Username = '{self.user_name}' AND CntCorrectAnswers IS NOT Null
+            '''
+
+        cursor.execute(sql_instruction)
+        content = cursor.fetchall()
+        connection.commit()
+        cnt = 0
+        y = 0
+
+        for x in content:
+            y += 1
+            cnt += int(x[3])
+
+        if y >= 1:
+            y *= 10
+
+            sql_instruction = f'''
+                UPDATE User
+                SET TotalExercises = '{y}',
+                TotalCorrectExercises = '{cnt}'
+                WHERE Username = '{self.user_name}'
+                '''
+
+            cursor.execute(sql_instruction)
+
+        connection.commit()
+        connection.close()
 
     # Ergänzen der fehlenden Informationen von exercises
 
