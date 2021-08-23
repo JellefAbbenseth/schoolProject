@@ -49,8 +49,17 @@ def home():
         text += f' {x[5]}\tDurchschnitt: {x[6]}'
         themes.append(text)
 
+    # Aufgabenblätter einsehen
+    exerciseSheets = database.getExerciseSheets()
+    print(exerciseSheets)
+    exSheets = dict()
+    for x in exerciseSheets:
+        key = int(x[1])
+        value = f'Aufgabenblatt {x[1]} vom {x[2]}: Durchschnittlich {x[4]} % richtig'
+        exSheets[key] = value
+
     return render_template('home.html', user=current_user, user_name=user_name, first_name=first_name,
-                           last_name=last_name, exercises=exercises, average=average, themes=themes)
+                           last_name=last_name, exercises=exercises, average=average, themes=themes, exSheets=exSheets)
 
 
 @views.route('/exercise_sheet', methods=['GET', 'POST'])
@@ -73,11 +82,11 @@ def exerciseSheet():
     ex = database.getExercises()
     print(ex)
     exercises = dict()
-    y = 0
+    key = 0
     for x in ex:
-        y += 1
-        text = f'{y}. Aufgabe: {x[4]}'
-        exercises[y] = text
-        print(text)
+        key += 1
+        value = f'{key}. Aufgabe: {x[4]}'
+        exercises[key] = value
+        print(value)
 
     return render_template('exercise_sheet.html', user=current_user, exercises=exercises)

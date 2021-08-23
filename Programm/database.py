@@ -522,3 +522,21 @@ class Database:
     @staticmethod
     def getUserInformation():
         return 'Test'
+
+    # Auslesen der Aufgabenblätter
+    def getExerciseSheets(self):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+
+        sql_instruction = f'''
+            SELECT * FROM exerciseSheets
+            WHERE Username = '{self.user_name}' AND CntCorrectAnswers IS NOT Null
+            ORDER BY exSheetNum DESC
+            '''
+        cursor.execute(sql_instruction)
+        content = cursor.fetchall()
+
+        connection.commit()
+        connection.close()
+
+        return content

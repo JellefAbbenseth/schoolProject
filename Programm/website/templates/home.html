@@ -47,14 +47,16 @@
             <form method="POST" action="/">
                 <button id="exButton" type="submit" value="exercise" name="exercise_button">Zufällige Aufgaben</button>
             </form>
-            {% for theme in themes %}
-                <li class="list-group-item">
-                    {{ theme }}
-                    <button type="button" class="open">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </li>
-            {% endfor %}
+            <ul>
+                {% for theme in themes %}
+                    <li class="list-group-item">
+                        {{ theme }}
+                        <button type="button" class="open">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
             <!--
             <pre>1. Thema: Addition          Stufe: {{niveau}}            Aufgaben: {{number_exercises}}             Durchschnitt: {{average_exercises}}</pre>
             <p>Textfeld?!</p>
@@ -63,6 +65,16 @@
         <div id="exercises">
             <h2>Aufgaben</h2>
             <p>1. Aufgabenblatt ...</p>
+            <ul>
+                {% for key, value in exSheets.items() %}
+                    <li class="list-group-item">
+                        <pre>{{ value }}</pre>
+                        <button type="button" class="open" id="selector-{{ key }}" name="selector-{{ key }}">
+                            Ansehen
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </main>
 {% endblock %}
