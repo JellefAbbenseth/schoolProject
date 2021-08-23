@@ -7,6 +7,9 @@
     </header>
     <main>
         <form method="POST">
+            <!--
+                button hand-in_button muss in der selben form methode sein
+            -->
             {% for key, value in exercises.items() %}
                 <li class="list-group-item">
                     <pre>{{ value }}</pre>
@@ -19,11 +22,11 @@
                     />
                 </li>
             {% endfor %}
+            <button id="hand-in_button" type="submit" class="btn btn-primary" value="submit" name="hand-in_button">Einreichen</button>            
         </form>
     </main>
     <footer>
         <form method="POST">
-            <button id="hand-in_button" type="submit" value="submit" name="hand-in_button">Einreichen</button>
             <button id="return_button" type="submit" value="return" name="return_button">Home</button>
         </form>
     </footer>    
