@@ -262,6 +262,31 @@ class Database:
         connection.commit()
         connection.close()
 
+    # Prüfen auf unbearbeitete Aufgabenblätter
+
+    def unansweredExercises(self):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+
+        sql_instruction = f'''
+            SELECT * FROM exerciseSheets
+            WHERE Username = '{self.user_name}' AND CntCorrectAnswers IS Null
+            '''
+
+        cursor.execute(sql_instruction)
+        exerciseSheets = cursor.fetchall()
+
+        num = 0
+        if len(exerciseSheets) >= 1:
+            for x in exerciseSheets:
+                num = x[1]
+                print(num)
+            self.exercise_sheet_num = num
+
+        connection.commit()
+        connection.close()
+        return num
+
     # Entnehme die Aufgaben aus der Datenbank
     # Speichern als Liste
 

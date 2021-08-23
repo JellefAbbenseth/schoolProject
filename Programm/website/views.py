@@ -19,8 +19,11 @@ def home():
         if request.form.get('logout_button'):
             return render_template('login.html')
         if request.form.get('exercise_button'):
-            list_subjects = database.actualNiveau()
-            difficulty.chooseExercises(list_subjects)
+            num = database.unansweredExercises()
+            print(num)
+            if num == 0:
+                list_subjects = database.actualNiveau()
+                difficulty.chooseExercises(list_subjects)
             return redirect(url_for('views.exerciseSheet'))
         if request.form.get('hand-in_button'):
             return render_template('exercise_sheet.html')

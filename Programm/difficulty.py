@@ -345,6 +345,7 @@ class Difficulty:
                     elif choice == 6:
                         self.root(self.list_subjects[6][4] + 1)
 
+    # Veraltet, möglicherweise aktuell nicht mehr genutzt
     def answerExercises(self):
         exercises = self.db.getExercises()
         answers = list()
