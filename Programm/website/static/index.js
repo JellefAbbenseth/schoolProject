@@ -1,4 +1,5 @@
 function openExSheet(inspectId){
-    id = inspectId.slice(8)
-    window.location.href = "/inspect_exercise_sheet/"+Id
+    id = inspectId.slice(8);
+    link = "/inspect_exercise_sheet/"+id;
+    window.location.href = link;
 }

@@ -67,12 +67,14 @@
             <p>1. Aufgabenblatt ...</p>
             <ul>
                 {% for key, value in exSheets.items() %}
-                    <li class="list-group-item">
-                        <pre>{{ value }}</pre>
-                        <button type="button" class="open" id="inspect-{{ key }}" name="inspect-{{ key }}" onclick="openExSheet(this.id)">
-                            Ansehen
-                        </button>
-                    </li>
+                    <form method="POST">
+                        <li class="list-group-item">
+                            <pre>{{ value }}</pre>
+                            <button type="button" class="open" id="inspect-{{ key }}" name="inspect-{{ key }}" onclick="openExSheet(this.id)">
+                                <span aria-hidden="true">Ansehen</span>
+                            </button>
+                        </li>
+                        </form>
                 {% endfor %}
             </ul>
         </div>
