@@ -53,13 +53,18 @@ def home():
 @views.route('/exercise_sheet', methods=['GET', 'POST'])
 def exerciseSheet():
     if request.method == 'POST':
-        text = request.form.get('selector-1')
         print('Hier: exerciseSheet')
         if request.form.get('return_button'):
             return redirect(url_for('views.home'))
         if request.form.get('hand-in_button'):
             print('Daten eingelesen:')
-            print(text)
+            # text = request.form.get('selector-1')
+            answers = list()
+            for x in range(0, 10):
+                y = x + 1
+                answers.append(request.form.get(f'selector-{y}'))
+            print(answers)
+            difficulty.checkExercises(answers)
     print('Exercises')
 
     ex = database.getExercises()

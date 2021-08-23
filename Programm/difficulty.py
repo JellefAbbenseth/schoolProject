@@ -364,3 +364,23 @@ class Difficulty:
         values = [cnt_correct_answers, correct_answers_average]
         self.db.updateExerciseSheet(values)
         self.db.changeNiveau()
+
+    def checkExercises(self, answers):
+        exercises = self.db.getExercises()
+        solution_answers = list()
+        cnt_correct_answers = 0
+        cnt = 0
+        for x in exercises:
+            if int(answers[cnt]) != int(x[5]):
+                solution_answers.append(False)
+            else:
+                cnt_correct_answers += 1
+                solution_answers.append(True)
+            cnt += 1
+
+        self.db.updateExercises(answers, solution_answers)
+
+        correct_answers_average = int(cnt_correct_answers / len(exercises) * 100)
+        values = [cnt_correct_answers, correct_answers_average]
+        self.db.updateExerciseSheet(values)
+        self.db.changeNiveau()
