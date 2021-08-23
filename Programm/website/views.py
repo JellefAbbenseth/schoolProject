@@ -45,14 +45,14 @@ def home():
         average = 100
     user_information = database.userSubjectInformation()
 
-    themes = list()
-    y = 0
+    themes = dict()
+    key = 0
     for x in user_information:
-        topic = topic_names[y]
-        text = f'{x[0]}. Thema: {topic}\tNiveau: {x[4]}\tAufgaben bearbeitet:'
-        text += f' {x[5]}\tDurchschnitt: {x[6]}'
-        themes.append(text)
-        y += 1
+        topic = topic_names[key]
+        value = f'{x[0]}. Thema: {topic}\tNiveau: {x[4]}\tAufgaben bearbeitet:'
+        value += f' {x[5]}\tDurchschnitt: {x[6]}'
+        key += 1
+        themes[key] = value
 
     # Aufgabenblätter einsehen
     exerciseSheets = database.getExerciseSheets()
@@ -93,6 +93,39 @@ def exerciseSheet():
         value = f'{key}. Aufgabe: {x[4]}'
         exercises[key] = value
         print(value)
+
+    return render_template('exercise_sheet.html', user=current_user, exercises=exercises)
+
+
+@views.route('/chooseExercises/<id>', methods=['GET', 'POST'])
+def chooseExercises(id):
+    if request.method == 'POST':
+        print('Hier: exerciseSheet')
+        if request.form.get('return_button'):
+            return redirect(url_for('views.home'))
+        if request.form.get('hand-in_button'):
+            print('Daten eingelesen:')
+            # text = request.form.get('selector-1')
+            answers = list()
+            for x in range(0, 10):
+                y = x + 1
+                answers.append(request.form.get(f'selector-{y}'))
+            print(answers)
+            difficulty.checkExercises(answers)
+    print('Exercises')
+
+    print('Thema:')
+    print(id)
+
+    # ex = database.getExercises()
+    # print(ex)
+    exercises = dict()
+    # key = 0
+    # for x in ex:
+    #     key += 1
+    #     value = f'{key}. Aufgabe: {x[4]}'
+    #     exercises[key] = value
+    #     print(value)
 
     return render_template('exercise_sheet.html', user=current_user, exercises=exercises)
 

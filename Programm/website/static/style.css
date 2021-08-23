@@ -52,6 +52,11 @@ footer {
     padding: 10px;
 }
 
+ul {
+    text-decoration: none;
+    list-style: none;
+}
+
 /*
     login.html spezifische styles
 */
