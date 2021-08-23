@@ -6,14 +6,14 @@
         <h1>Lernprogramm</h1>
         <div id="log">
             <form method="POST">
-                <button id="loButton" href="/logout" type="submit" value="logout" name="logout_button">Logout</button>
+                <button id="loButton" type="submit" value="logout" name="logout_button">Logout</button>
             </form>
         </div>        
     </header>
     <main>
         <div id="user">
             <h2>Anwender</h2>
-            <div id="user_item">
+            <div id="user_item1">
                 <form method="POST" action="/">
                     <h3>Benutzer</h3>
                     <div class="form-group">
@@ -30,7 +30,7 @@
                     </div>
                 </form>
             </div>
-            <div id="user_item">
+            <div id="user_item2">
                 <h3>Nutzerstatistiken</h3>
                 <div class="form-group">
                     <label for="exercises">Aufgaben gesamt: </label>
@@ -69,7 +69,7 @@
                 {% for key, value in exSheets.items() %}
                     <li class="list-group-item">
                         <pre>{{ value }}</pre>
-                        <button type="button" class="open" id="selector-{{ key }}" name="selector-{{ key }}">
+                        <button type="button" class="open" id="inspect-{{ key }}" name="inspect-{{ key }}" onclick="openExSheet(this.id)">
                             Ansehen
                         </button>
                     </li>

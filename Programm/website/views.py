@@ -90,3 +90,16 @@ def exerciseSheet():
         print(value)
 
     return render_template('exercise_sheet.html', user=current_user, exercises=exercises)
+
+
+@views.route('/inspect_exercise_sheet/<id>', methods=['GET', 'POST'])
+def InspectExerciseSheet(id):
+    if request.method == 'POST':
+        print('Hier: exerciseSheet')
+        if request.form.get('return_button'):
+            return redirect(url_for('views.home'))
+
+    # Anzeigen des Aufgabenblatts mithilfe der id
+    print(id)
+
+    return render_template('inspect_exercise_sheet.html', user=current_user)
