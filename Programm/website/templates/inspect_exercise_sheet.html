@@ -6,26 +6,16 @@
         <h1>Aufgabenblatt</h1>
     </header>
     <main>
-        <form method="POST">
-            <!--
-                button hand-in_button muss in der selben form methode sein
-            -->
-            <ul>
-                {% for key, value in exercises.items() %}
-                    <li class="list-group-item">
-                        <pre>{{ value }}</pre>
-                        <input
-                            type="text"
-                            class="form-control"
-                            id="selector-{{ key }}"
-                            name="selector-{{ key }}"
-                            placeholder="0"
-                        />
-                    </li>
-                {% endfor %}
-            </ul>
-            <button id="hand-in_button" type="submit" class="btn btn-primary" value="submit" name="hand-in_button">Einreichen</button>            
-        </form>
+        <!--
+            button hand-in_button muss in der selben form methode sein
+        -->
+        <ul>
+            {% for key, value in exercises.items() %}
+                <li class="list-group-item">
+                    <pre>{{ value }}</pre>
+                </li>
+            {% endfor %}
+        </ul>
     </main>
     <footer>
         <form method="POST">

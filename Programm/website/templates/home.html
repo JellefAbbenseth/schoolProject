@@ -13,7 +13,7 @@
     <main>
         <div id="user">
             <h2>Anwender</h2>
-            <div id="user_item1">
+            <div id="user_item">
                 <form method="POST" action="/">
                     <h3>Benutzer</h3>
                     <div class="form-group">
@@ -30,7 +30,7 @@
                     </div>
                 </form>
             </div>
-            <div id="user_item2">
+            <div id="user_item">
                 <h3>Nutzerstatistiken</h3>
                 <div class="form-group">
                     <label for="exercises">Aufgaben gesamt: </label>
@@ -50,7 +50,7 @@
             <ul>
                 {% for theme in themes %}
                     <li class="list-group-item">
-                        {{ theme }}
+                        <pre>{{ theme }}</pre>
                         <button type="button" class="open">
                             <span aria-hidden="true">&times;</span>
                         </button>

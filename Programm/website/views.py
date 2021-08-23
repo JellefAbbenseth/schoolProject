@@ -13,6 +13,8 @@ difficulty = Difficulty(database)
 def home():
     g.user = current_user.get_id()
     # print(g.user)
+    topic_names = ['Addition', 'Subtraktion', 'Multiplikation', 'Division', 'Rechenketten',
+                   'Potenzen', 'Wurzeln']
 
     if request.method == 'POST':
         print('Hier: home')
@@ -44,10 +46,13 @@ def home():
     user_information = database.userSubjectInformation()
 
     themes = list()
+    y = 0
     for x in user_information:
-        text = f'{x[0]}. Thema: \"Thema\"\tNiveau: {x[4]}\tAufgaben bearbeitet:'
+        topic = topic_names[y]
+        text = f'{x[0]}. Thema: {topic}\tNiveau: {x[4]}\tAufgaben bearbeitet:'
         text += f' {x[5]}\tDurchschnitt: {x[6]}'
         themes.append(text)
+        y += 1
 
     # Aufgabenblätter einsehen
     exerciseSheets = database.getExerciseSheets()
@@ -102,4 +107,18 @@ def InspectExerciseSheet(id):
     # Anzeigen des Aufgabenblatts mithilfe der id
     print(id)
 
-    return render_template('inspect_exercise_sheet.html', user=current_user)
+    ex = database.getExercises(id)
+    print(ex)
+    exercises = dict()
+    key = 0
+    for x in ex:
+        key += 1
+        if x[7] == 1:
+            text = 'richtig!'
+        else:
+            text = 'falsch!'
+        value = f'{key}. Aufgabe: {x[4]} {x[5]}\t\tEingegeben: {x[6]}\t\tDas Ergebnis ist {text}'
+        exercises[key] = value
+        print(value)
+
+    return render_template('inspect_exercise_sheet.html', user=current_user, exercises=exercises)

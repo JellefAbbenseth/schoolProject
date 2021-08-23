@@ -291,11 +291,14 @@ class Database:
     # Entnehme die Aufgaben aus der Datenbank
     # Speichern als Liste
 
-    def getExercises(self):
+    def getExercises(self, exercise_sheet_num=None):
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
 
-        num = self.exercise_sheet_num
+        if exercise_sheet_num is None:
+            num = self.exercise_sheet_num
+        else:
+            num = exercise_sheet_num
         sql_instruction = f'''
             SELECT * FROM exercises
             WHERE Username = '{self.user_name}' AND ExSheetNum LIKE '{num}'
