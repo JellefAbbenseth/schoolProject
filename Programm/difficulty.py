@@ -226,7 +226,7 @@ class Difficulty:
         self.exerciseSheet = self.db.newExerciseSheet(self.day)
         self.list_subjects = list_subjects
         if len(self.list_subjects) < 3 and id is None:
-            if len(self.list_subjects) == 1:
+            if len(self.list_subjects) <= 1:
                 for x in range(0, 7):
                     self.cnt_exercise = x + 1
                     self.addition(self.list_subjects[0][4])

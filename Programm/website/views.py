@@ -49,7 +49,7 @@ def home():
     key = 0
     for x in user_information:
         topic = topic_names[key]
-        value = f'{x[0]}. Thema: {topic}\tNiveau: {x[4]}\tAufgaben bearbeitet:'
+        value = f'Thema: {topic}\tNiveau: {x[4]}\tAufgaben bearbeitet:'
         value += f' {x[5]}\tDurchschnitt: {x[6]}'
         key += 1
         themes[key] = value
@@ -86,6 +86,8 @@ def exerciseSheet():
 
     ex = database.getExercises()
     print(ex)
+    if len(ex) == 0:
+        database.newNiveau()
     exercises = dict()
     key = 0
     for x in ex:

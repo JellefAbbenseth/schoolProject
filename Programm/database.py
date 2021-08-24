@@ -201,6 +201,7 @@ class Database:
             VALUES ('{user_name}', '{first_name}', '{last_name}')
             '''
         cursor.execute(sql_instruction)
+        connection.commit()
 
         sql_instruction = f'''
             INSERT INTO subjects (Username, SubjectArea, Topic, Niveau)
@@ -543,3 +544,27 @@ class Database:
         connection.close()
 
         return content
+
+    def newNiveau(self):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+
+        sql_instruction = f'''
+            SELECT * FROM subjects
+            WHERE Username = '{self.user_name}'
+            '''
+        cursor.execute(sql_instruction)
+        content = cursor.fetchall()
+        connection.commit()
+
+        if len(content) == 0:
+            sql_instruction = f'''
+            INSERT INTO subjects (Username, SubjectArea, Topic, Niveau)
+            VALUES ('{self.user_name}', '1', '1', '1')
+            '''
+            cursor.execute(sql_instruction)
+
+            self.new_user = True
+
+        connection.commit()
+        connection.close()
