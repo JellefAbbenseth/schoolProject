@@ -30,7 +30,7 @@ button {
 }
 
 button#loButton {
-    background-color: seagreen;
+    background-color: red;
 }
 
 main {
@@ -46,6 +46,15 @@ div#user {
 
 div#user_item {
     width: 50%;
+}
+
+footer {
+    padding: 10px;
+}
+
+ul {
+    text-decoration: none;
+    list-style: none;
 }
 
 /*
@@ -67,7 +76,7 @@ div#login_frame {
     padding: 10px;
 }
 
-input#input_user_name {
+input#input_name {
     width: 75px;
     margin: 5px;
 }
@@ -83,10 +92,10 @@ div#registry_frame {
     border-color: black;
     z-index: 2;
     left: -120px;
-    top: -50px;
+    top: -100px;
     margin-left: 50%;
     margin-top: 50%;
     width: 240px;
-    height: 100px;
+    height: 200px;
     padding: 10px;
 }

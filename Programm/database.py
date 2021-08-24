@@ -1,4 +1,18 @@
 import sqlite3
+from Programm.website import db
+from flask_login import UserMixin
+
+
+# Datenbankanbindung für SQLAlchemy
+# Ermöglicht SQLAlchemy die User Tabelle zu beschreiben
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    UserName = db.Column(db.String(30), unique=True)
+    FirstName = db.Column(db.String(30))
+    LastName = db.Column(db.String(30))
+    TotalExercises = db.Column(db.Integer, default=0)
+    TotalCorrectExercises = db.Column(db.Integer, default=0)
 
 
 # Database ist eine Klasse, die den Zugriff auf die Datenbank SQLite 3 ermöglicht
@@ -10,8 +24,10 @@ class Database:
         self.new_user: bool = False
         self.list_subjects = list()
         self.exercises = list()
+        self.user_id = 1
         self.user_name = 'Test'
         self.exercise_sheet_num = 1
+        self.createTables()
 
     @staticmethod
     def createTables():
@@ -23,10 +39,13 @@ class Database:
         # enthält UserName (Key), FirstName, LastName
 
         sql_instruction = '''
-        CREATE TABLE IF NOT EXISTS user (
-        UserName varchar (30) NOT NULL PRIMARY KEY,
-        FirstName varchar (30) NOT NULL,
-        LastName varchar (30) NOT NULL);
+        CREATE TABLE IF NOT EXISTS User (
+        ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        UserName STRING (30) NOT NULL UNIQUE,
+        FirstName STRING (30) NOT NULL,
+        LastName STRING (30) NOT NULL,
+        TotalExercises INTEGER Default 0,
+        TotalCorrectExercises INTEGER DEFAULT 0);
         '''
         cursor.execute(sql_instruction)
 
@@ -103,6 +122,45 @@ class Database:
         connection.close()
         print('Tabellen erstellt')
 
+    # Liest die Informationen aus der Datenbank aus und gibt sie dan die Webseite weiter
+
+    def userInformation(self, user_id):
+        self.user_id = user_id
+        self.updateUser()
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+        sql_instruction = f'''
+        SELECT * FROM User WHERE id = {self.user_id}
+        '''
+
+        cursor.execute(sql_instruction)
+
+        content = cursor.fetchall()
+        self.user_name = content[0][1]
+        connection.close()
+        return content
+
+    def userSubjectInformation(self):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+        sql_instruction = f'''
+        SELECT * FROM subjects WHERE Username = '{self.user_name}'
+        '''
+        cursor.execute(sql_instruction)
+
+        content = cursor.fetchall()
+
+        if len(content) < 1:
+            sql_instruction = f'''
+            INSERT INTO subjects (Username, SubjectArea, Topic, Niveau)
+            VALUES ('{self.user_name}', '1', '1', '1')
+            '''
+            cursor.execute(sql_instruction)
+            self.new_user = True
+
+        connection.close()
+        return content
+
     # selectUser ermöglicht das Suchen und Finden eines bestehenden Datensatzes
     # Weiterhin prüft es, ob bereits ein User mit dem übergebenen Wert besteht
 
@@ -114,7 +172,7 @@ class Database:
         name_exist = False
 
         sql_instruction = '''
-        SELECT * FROM user
+        SELECT * FROM User
         '''
 
         cursor.execute(sql_instruction)
@@ -205,14 +263,42 @@ class Database:
         connection.commit()
         connection.close()
 
-    # Entnehme die Aufgaben aus der Datenbank
-    # Speichern als Liste
+    # Prüfen auf unbearbeitete Aufgabenblätter
 
-    def getExercises(self):
+    def unansweredExercises(self):
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
 
-        num = self.exercise_sheet_num
+        sql_instruction = f'''
+            SELECT * FROM exerciseSheets
+            WHERE Username = '{self.user_name}' AND CntCorrectAnswers IS Null
+            '''
+
+        cursor.execute(sql_instruction)
+        exerciseSheets = cursor.fetchall()
+
+        num = 0
+        if len(exerciseSheets) >= 1:
+            for x in exerciseSheets:
+                num = x[1]
+                print(num)
+            self.exercise_sheet_num = num
+
+        connection.commit()
+        connection.close()
+        return num
+
+    # Entnehme die Aufgaben aus der Datenbank
+    # Speichern als Liste
+
+    def getExercises(self, exercise_sheet_num=None):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+
+        if exercise_sheet_num is None:
+            num = self.exercise_sheet_num
+        else:
+            num = exercise_sheet_num
         sql_instruction = f'''
             SELECT * FROM exercises
             WHERE Username = '{self.user_name}' AND ExSheetNum LIKE '{num}'
@@ -224,6 +310,42 @@ class Database:
         connection.commit()
         connection.close()
         return self.exercises
+
+    # Überarbeiten der Benutzerdaten von User
+
+    def updateUser(self):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+
+        sql_instruction = f'''
+            SELECT * FROM exerciseSheets
+            WHERE Username = '{self.user_name}' AND CntCorrectAnswers IS NOT Null
+            '''
+
+        cursor.execute(sql_instruction)
+        content = cursor.fetchall()
+        connection.commit()
+        cnt = 0
+        y = 0
+
+        for x in content:
+            y += 1
+            cnt += int(x[3])
+
+        if y >= 1:
+            y *= 10
+
+            sql_instruction = f'''
+                UPDATE User
+                SET TotalExercises = '{y}',
+                TotalCorrectExercises = '{cnt}'
+                WHERE Username = '{self.user_name}'
+                '''
+
+            cursor.execute(sql_instruction)
+
+        connection.commit()
+        connection.close()
 
     # Ergänzen der fehlenden Informationen von exercises
 
@@ -357,10 +479,10 @@ class Database:
                 print(f'Glückwunsch, du hast {len(exercises)} Aufgaben durchschnittlich'
                       f' zu {average_correct} prozent richtig.\n'
                       f'Du bist im Thema {self.list_subjects[x][2]} {self.list_subjects[x][3]} '
-                      f'nun auf Niveau {self.list_subjects[x][4]+1} aufgestiegen.')
+                      f'nun auf Niveau {self.list_subjects[x][4] + 1} aufgestiegen.')
                 sql_instruction = f'''
                             Update subjects
-                            SET Niveau = '{self.list_subjects[x][4]+1}',
+                            SET Niveau = '{self.list_subjects[x][4] + 1}',
                                 NumberExercises = 0,
                                 AverageCorrect = 100
                             WHERE SID = '{self.list_subjects[x][0]}'
@@ -375,23 +497,23 @@ class Database:
             cursor.execute(sql_instruction)
             connection.commit()
 
-        if int(self.list_subjects[len(self.list_subjects)-1][4]) >= 3:
+        if int(self.list_subjects[len(self.list_subjects) - 1][4]) >= 3:
             print('Glückwunsch, neues Thema freigeschaltet!')
-            if self.list_subjects[len(self.list_subjects)-1][2] == 1:
+            if self.list_subjects[len(self.list_subjects) - 1][2] == 1:
                 self.changeDifficulty(2, 1, 1)
-            elif self.list_subjects[len(self.list_subjects)-1][2] == 2:
+            elif self.list_subjects[len(self.list_subjects) - 1][2] == 2:
                 self.changeDifficulty(3, 1, 1)
-            elif self.list_subjects[len(self.list_subjects)-1][2] == 3 \
-                    and self.list_subjects[len(self.list_subjects)-1][3] == 1:
+            elif self.list_subjects[len(self.list_subjects) - 1][2] == 3 \
+                    and self.list_subjects[len(self.list_subjects) - 1][3] == 1:
                 self.changeDifficulty(3, 2, 1)
-            elif self.list_subjects[len(self.list_subjects)-1][2] == 3 \
-                    and self.list_subjects[len(self.list_subjects)-1][3] == 2:
+            elif self.list_subjects[len(self.list_subjects) - 1][2] == 3 \
+                    and self.list_subjects[len(self.list_subjects) - 1][3] == 2:
                 self.changeDifficulty(3, 3, 1)
-            elif self.list_subjects[len(self.list_subjects)-1][2] == 3 \
-                    and self.list_subjects[len(self.list_subjects)-1][3] == 3:
+            elif self.list_subjects[len(self.list_subjects) - 1][2] == 3 \
+                    and self.list_subjects[len(self.list_subjects) - 1][3] == 3:
                 self.changeDifficulty(4, 1, 1)
-            elif self.list_subjects[len(self.list_subjects)-1][2] == 4 \
-                    and self.list_subjects[len(self.list_subjects)-1][3] == 1:
+            elif self.list_subjects[len(self.list_subjects) - 1][2] == 4 \
+                    and self.list_subjects[len(self.list_subjects) - 1][3] == 1:
                 self.changeDifficulty(4, 2, 1)
             else:
                 print('Glückwunsch, alle möglichen Themen freigeschaltet.\n'
@@ -399,3 +521,25 @@ class Database:
 
         connection.commit()
         connection.close()
+
+    @staticmethod
+    def getUserInformation():
+        return 'Test'
+
+    # Auslesen der Aufgabenblätter
+    def getExerciseSheets(self):
+        connection = sqlite3.connect('datenbank/schoolProject.db')
+        cursor = connection.cursor()
+
+        sql_instruction = f'''
+            SELECT * FROM exerciseSheets
+            WHERE Username = '{self.user_name}' AND CntCorrectAnswers IS NOT Null
+            ORDER BY exSheetNum DESC
+            '''
+        cursor.execute(sql_instruction)
+        content = cursor.fetchall()
+
+        connection.commit()
+        connection.close()
+
+        return content

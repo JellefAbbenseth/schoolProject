@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Aufgabenblatt{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>Aufgabenblatt</h1>
+    </header>
+    <main>
+        <!--
+            button hand-in_button muss in der selben form methode sein
+        -->
+        <ul>
+            {% for key, value in exercises.items() %}
+                <li class="list-group-item">
+                    <pre>{{ value }}</pre>
+                </li>
+            {% endfor %}
+        </ul>
+    </main>
+    <footer>
+        <form method="POST">
+            <button id="return_button" type="submit" value="return" name="return_button">Home</button>
+        </form>
+    </footer>    
+{% endblock %}
