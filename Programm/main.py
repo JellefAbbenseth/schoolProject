@@ -1,13 +1,9 @@
-# from database import Database
-# from difficulty import Difficulty
 from website import create_app
 import webbrowser
 
 # Programmstart "main"
-# Erstellen oder Aufrufen der Datenbank mit Anmeldung
-# Stellen von Aufgaben mit Möglichkeit weitere Aufgaben zu erstellen und bearbeiten
-# Beenden des Programms, wenn der User es möchte, nachdem alle Aufgaben beantwortet wurden
-# Öffnen einer Webseite (vorläufig auskommentieren des restlichen Programms!)
+# start des Programms
+# Öffnen der Webseite
 
 print('Programm Start\n')
 

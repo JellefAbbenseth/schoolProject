@@ -8,6 +8,11 @@ database = Database()
 difficulty = Difficulty(database)
 
 
+# Hauptseite nach Login
+# Ermöglicht den Zugriff auf Aufgaben
+# Gibt eine Übersicht über verschiedene Bereiche
+#   Nutzerinformationen, Themengebiete für Aufgabenauswahl, Einsehen beendeter Aufgaben
+
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
@@ -17,12 +22,12 @@ def home():
                    'Potenzen', 'Wurzeln']
 
     if request.method == 'POST':
-        print('Hier: home')
+        # print('Hier: home')
         if request.form.get('logout_button'):
             return render_template('login.html')
         if request.form.get('exercise_button'):
             num = database.unansweredExercises()
-            print(num)
+            # print(num)
             if num == 0:
                 list_subjects = database.actualNiveau()
                 difficulty.chooseExercises(list_subjects)
@@ -56,7 +61,7 @@ def home():
 
     # Aufgabenblätter einsehen
     exerciseSheets = database.getExerciseSheets()
-    print(exerciseSheets)
+    # print(exerciseSheets)
     exSheets = dict()
     for x in exerciseSheets:
         key = int(x[1])
@@ -67,25 +72,30 @@ def home():
                            last_name=last_name, exercises=exercises, average=average, themes=themes, exSheets=exSheets)
 
 
+# Seite für die Aufgabenstellung
+# Aufgaben werden durch den Nutzer gelöst
+# Auswertung erfolgt beim Absenden
+# Aufgaben werden generiert oder bestehende noch nicht bearbeitete übernommen
+
 @views.route('/exercise_sheet', methods=['GET', 'POST'])
 def exerciseSheet():
     if request.method == 'POST':
-        print('Hier: exerciseSheet')
+        # print('Hier: exerciseSheet')
         if request.form.get('return_button'):
             return redirect(url_for('views.home'))
         if request.form.get('hand-in_button'):
-            print('Daten eingelesen:')
+            # print('Daten eingelesen:')
             # text = request.form.get('selector-1')
             answers = list()
             for x in range(0, 10):
                 y = x + 1
                 answers.append(request.form.get(f'selector-{y}'))
-            print(answers)
+            # print(answers)
             difficulty.checkExercises(answers)
-    print('Exercises')
+    # print('Exercises')
 
     ex = database.getExercises()
-    print(ex)
+    # print(ex)
     if len(ex) == 0:
         database.newNiveau()
     exercises = dict()
@@ -94,62 +104,67 @@ def exerciseSheet():
         key += 1
         value = f'{key}. Aufgabe: {x[4]}'
         exercises[key] = value
-        print(value)
+        # print(value)
 
     return render_template('exercise_sheet.html', user=current_user, exercises=exercises)
 
 
+# Freie Wahl der Aufgabengebiete
+# Entweder zufällig oder per Auswahl in der Themenliste
+
 @views.route('/chooseExercises/<id>', methods=['GET', 'POST'])
 def chooseExercises(id):
     if request.method == 'POST':
-        print('Hier: exerciseSheet')
+        # print('Hier: exerciseSheet')
         if request.form.get('return_button'):
             return redirect(url_for('views.home'))
         if request.form.get('hand-in_button'):
-            print('Daten eingelesen:')
+            # print('Daten eingelesen:')
             # text = request.form.get('selector-1')
             answers = list()
             for x in range(0, 10):
                 y = x + 1
                 answers.append(request.form.get(f'selector-{y}'))
-            print(answers)
+            # print(answers)
             difficulty.checkExercises(answers)
-    print('Exercises')
-
-    print('Thema:')
-    print(id)
+    # print('Exercises')
+    #
+    # print('Thema:')
+    # print(id)
 
     num = database.unansweredExercises()
-    print(num)
+    # print(num)
     if num == 0:
         list_subjects = database.actualNiveau()
         difficulty.chooseExercises(list_subjects, id)
 
     ex = database.getExercises()
-    print(ex)
+    # print(ex)
     exercises = dict()
     key = 0
     for x in ex:
         key += 1
         value = f'{key}. Aufgabe: {x[4]}'
         exercises[key] = value
-        print(value)
+        # print(value)
 
     return render_template('exercise_sheet.html', user=current_user, exercises=exercises)
 
 
+# Einsehen der abgeschlossenen Aufgaben als Übersicht
+
 @views.route('/inspect_exercise_sheet/<id>', methods=['GET', 'POST'])
 def InspectExerciseSheet(id):
     if request.method == 'POST':
-        print('Hier: exerciseSheet')
+        # print('Hier: exerciseSheet')
         if request.form.get('return_button'):
             return redirect(url_for('views.home'))
 
     # Anzeigen des Aufgabenblatts mithilfe der id
-    print(id)
+    # print(id)
 
     ex = database.getExercises(id)
-    print(ex)
+    # print(ex)
     exercises = dict()
     key = 0
     for x in ex:
@@ -160,6 +175,6 @@ def InspectExerciseSheet(id):
             text = 'falsch!'
         value = f'{key}. Aufgabe: {x[4]} {x[5]}\t\tEingegeben: {x[6]}\t\tDas Ergebnis ist {text}'
         exercises[key] = value
-        print(value)
+        # print(value)
 
     return render_template('inspect_exercise_sheet.html', user=current_user, exercises=exercises)

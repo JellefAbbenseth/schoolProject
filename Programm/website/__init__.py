@@ -35,6 +35,8 @@ def create_app():
     return app
 
 
+# Erstellen der Datenbank
+
 def create_database(app):
     if not path.exists('../datenbank/' + DB_Name):
         db.create_all(app=app)

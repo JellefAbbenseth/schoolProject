@@ -249,18 +249,6 @@ class Difficulty:
                     elif choice == 1:
                         self.subtraction(self.list_subjects[1][4] + 1)
         else:
-            # correct_input = False
-            # choice = 1
-            # while not correct_input:
-            #     try:
-            #         choice = int(input('Bitte treffe eine Wahl:\n'
-            #                            '1 zufällige Aufgaben\n'
-            #                            '2 Thema wählen\n'))
-            #     except ValueError:
-            #         print('Falsche eingabe, bitte neu eingeben als ganze Zahl!')
-            #         correct_input = False
-            #         continue
-            #     correct_input = True
             if id is None:
                 print('Zufall:')
                 for x in range(0, 7):
@@ -298,20 +286,6 @@ class Difficulty:
                     elif choice == 6:
                         self.root(self.list_subjects[6][4] + 1)
             else:
-                # print('Bitte triff eine Themenauswahl:')
-                # for x in range(0, len(self.list_subjects) - 1):
-                #     print(f'{x} {self.topic_names[x]}')
-                # correct_input = False
-                # while not correct_input:
-                #     try:
-                #         choice = int(input('Bitte treffe eine Wahl:\n'
-                #                            '1 zufällige Aufgaben\n'
-                #                            '2 Thema wählen\n'))
-                #     except ValueError:
-                #         print('Falsche eingabe, bitte neu eingeben als ganze Zahl!')
-                #         correct_input = False
-                #         continue
-                #     correct_input = True
                 choice = int(id) - 1
                 for x in range(0, 7):
                     self.cnt_exercise = x + 1
@@ -366,6 +340,8 @@ class Difficulty:
         values = [cnt_correct_answers, correct_answers_average]
         self.db.updateExerciseSheet(values)
         self.db.changeNiveau()
+
+    # Prüft das Ergebnis der Aufgaben
 
     def checkExercises(self, answers):
         exercises = self.db.getExercises()

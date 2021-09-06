@@ -7,6 +7,9 @@ from . import db
 auth = Blueprint('auth', __name__)
 
 
+# Webseite bei Start
+# Abfrage nach Nutzername, falls noch nicht vorhanden übergang zur Registrierung
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -28,12 +31,17 @@ def login():
     return render_template('login.html', user=current_user)
 
 
+# Logout erfolgt und abmelden des Nutzers
+
 @auth.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
 
+
+# Webseite zur Registrierung und erstellen eines neuen Nutzers
+# Eintragen in Datenbank, übergang zur Login webseite bei Abschluss
 
 @auth.route('/registry', methods=['GET', 'POST'])
 def registry():
@@ -44,17 +52,17 @@ def registry():
 
         try:
             user = User.query.filter_by(UserName=user_name).first()
-            print(user)
+            # print(user)
             if user and user.UserName == user_name:
                 print('Username already exists')
             else:
-                print(user_name)
+                # print(user_name)
                 new_user = User(UserName=user_name, FirstName=first_name, LastName=last_name)
                 db.session.add(new_user)
                 db.session.commit()
                 return redirect(url_for('auth.login'))
         except sqlalchemy.exc.OperationalError:
-            print(user_name)
+            # print(user_name)
             return render_template('registry.html')
 
     return render_template('registry.html')

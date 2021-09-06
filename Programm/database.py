@@ -120,7 +120,7 @@ class Database:
 
         connection.commit()
         connection.close()
-        print('Tabellen erstellt')
+        # print('Tabellen erstellt')
 
     # Liest die Informationen aus der Datenbank aus und gibt sie dan die Webseite weiter
 
@@ -139,6 +139,9 @@ class Database:
         self.user_name = content[0][1]
         connection.close()
         return content
+
+    # Gibt die Themengebiete zurück
+    # Wenn keine vorhanden sind, wird das 1. Themengebiet erstellt
 
     def userSubjectInformation(self):
         connection = sqlite3.connect('datenbank/schoolProject.db')
@@ -180,11 +183,11 @@ class Database:
         content = cursor.fetchall()
         for x in content:
             if x[0] == name:
-                print(x[0])
+                # print(x[0])
                 name_exist = True
 
-        if not name_exist:
-            print('Noch kein solcher Name vorhanden!')
+        # if not name_exist:
+        #     print('Noch kein solcher Name vorhanden!')
 
         connection.close()
         return name_exist
@@ -373,7 +376,7 @@ class Database:
     def updateExerciseSheet(self, values):
         cnt_correct_answers = values[0]
         average_correct_answers = values[1]
-        print(f'{cnt_correct_answers}, {average_correct_answers}')
+        # print(f'{cnt_correct_answers}, {average_correct_answers}')
 
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
@@ -456,6 +459,7 @@ class Database:
 
     # Prüfen ob in einem Themenbereich eine höhere Stufe erreicht wurde
     # Anpassen der abgeschlossenen Aufgaben
+    # Ermöglicht den Zugriff auf neue Aufgabengebiete
 
     def changeNiveau(self):
         connection = sqlite3.connect('datenbank/schoolProject.db')
@@ -477,10 +481,10 @@ class Database:
                     correct_answers += 1
             average_correct = int(correct_answers / len(exercises) * 100)
             if len(exercises) >= 5 and average_correct >= 80:
-                print(f'Glückwunsch, du hast {len(exercises)} Aufgaben durchschnittlich'
-                      f' zu {average_correct} prozent richtig.\n'
-                      f'Du bist im Thema {self.list_subjects[x][2]} {self.list_subjects[x][3]} '
-                      f'nun auf Niveau {self.list_subjects[x][4] + 1} aufgestiegen.')
+                # print(f'Glückwunsch, du hast {len(exercises)} Aufgaben durchschnittlich'
+                #       f' zu {average_correct} prozent richtig.\n'
+                #       f'Du bist im Thema {self.list_subjects[x][2]} {self.list_subjects[x][3]} '
+                #       f'nun auf Niveau {self.list_subjects[x][4] + 1} aufgestiegen.')
                 sql_instruction = f'''
                             Update subjects
                             SET Niveau = '{self.list_subjects[x][4] + 1}',
@@ -499,7 +503,7 @@ class Database:
             connection.commit()
 
         if int(self.list_subjects[len(self.list_subjects) - 1][4]) >= 3:
-            print('Glückwunsch, neues Thema freigeschaltet!')
+            # print('Glückwunsch, neues Thema freigeschaltet!')
             if self.list_subjects[len(self.list_subjects) - 1][2] == 1:
                 self.changeDifficulty(2, 1, 1)
             elif self.list_subjects[len(self.list_subjects) - 1][2] == 2:
@@ -516,9 +520,9 @@ class Database:
             elif self.list_subjects[len(self.list_subjects) - 1][2] == 4 \
                     and self.list_subjects[len(self.list_subjects) - 1][3] == 1:
                 self.changeDifficulty(4, 2, 1)
-            else:
-                print('Glückwunsch, alle möglichen Themen freigeschaltet.\n'
-                      'Weiterhin viel Spaß mit den Übungen.')
+            # else:
+            #     print('Glückwunsch, alle möglichen Themen freigeschaltet.\n'
+            #           'Weiterhin viel Spaß mit den Übungen.')
 
         connection.commit()
         connection.close()
@@ -528,6 +532,7 @@ class Database:
         return 'Test'
 
     # Auslesen der Aufgabenblätter
+
     def getExerciseSheets(self):
         connection = sqlite3.connect('datenbank/schoolProject.db')
         cursor = connection.cursor()
@@ -544,6 +549,8 @@ class Database:
         connection.close()
 
         return content
+
+    # Erstellt das erste Themengebiet
 
     def newNiveau(self):
         connection = sqlite3.connect('datenbank/schoolProject.db')
