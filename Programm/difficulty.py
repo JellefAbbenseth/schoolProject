@@ -320,27 +320,6 @@ class Difficulty:
                     elif choice == 6:
                         self.root(self.list_subjects[6][4] + 1)
 
-    # Veraltet, möglicherweise aktuell nicht mehr genutzt
-    def answerExercises(self):
-        exercises = self.db.getExercises()
-        answers = list()
-        solution_answers = list()
-        cnt_correct_answers = 0
-        for x in exercises:
-            answers.append(input(f'{x[4]}\n'))
-            if int(answers[len(answers)-1]) != int(x[5]):
-                solution_answers.append(False)
-            else:
-                cnt_correct_answers += 1
-                solution_answers.append(True)
-
-        self.db.updateExercises(answers, solution_answers)
-
-        correct_answers_average = int(cnt_correct_answers / len(exercises) * 100)
-        values = [cnt_correct_answers, correct_answers_average]
-        self.db.updateExerciseSheet(values)
-        self.db.changeNiveau()
-
     # Prüft das Ergebnis der Aufgaben
 
     def checkExercises(self, answers):
