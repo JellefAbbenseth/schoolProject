@@ -8,3 +8,6 @@ Zielplattform -> Python (Datenbanksystem, Webbrowser, ...)
 Oberfläche -> Mockups (Zeichnungen per Hand oder Programm)
 Projektplattform -> GitHub
 Dokumentation -> Microsoft Word / Textdokument
+
+Abschließende Informationen:
+Das Projekt ist abgeschlossen. Die Dokumente sind jedoch nicht fertig, werden jedoch nach Fertigstellung aus Datenschutzgründen nicht auf dieser Seite hochgeladen. Die Dokumente stellen den letzten Stand, vor offizieller Fertigstellung dar.
